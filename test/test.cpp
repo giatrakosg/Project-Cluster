@@ -3,7 +3,7 @@
 #include "../src/Vector.hpp"
 #include "../src/Database.hpp"
 #include "../src/Item.hpp"
-
+#include "../src/Parser.hpp"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -21,6 +21,17 @@ TEST_CASE( "storing vectors" ) {
     db.addItem(&v1);
     db.addItem(&v2);
     db.addItem(&v3);
+    REQUIRE(db.getSize() == 3) ;
+    REQUIRE(db.getItem("p1")->isEqual(v1));
+
+}
+TEST_CASE ("parsing data" ) {
+    Database db ;
+    Parser parser(&db);
+    std::string input_file ("./data/test_vector_small_id.dat");
+    parser.parseFile(input_file);
+    std::vector<double> p1 {1.0,2.3,5.9} ;
+    Vector v1 ("p1",p1);
     REQUIRE(db.getSize() == 3) ;
     REQUIRE(db.getItem("p1")->isEqual(v1));
 
