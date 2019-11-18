@@ -22,6 +22,7 @@ private:
     std::vector<double> coordinates ;
 public:
     Vector(std::string ,std::vector<double>);
+    Vector(std::string ); // Init an empty vector
     friend ostream& operator<<(ostream& os, const Vector& v) {
     os << "[ " << v.id << "|" ;
     for (size_t i = 0; i < v.coordinates.size(); i++) {
@@ -31,7 +32,7 @@ public:
     return os ;
     }
     bool isEqual(Item &q) ;
-
+    void addPoint(double );
 
     ~Vector();
 protected:

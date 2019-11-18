@@ -12,17 +12,22 @@
 #include "Database.hpp"
 #include <stdio.h>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include "Vector.hpp"
+
+using namespace std ;
 // Pure virtual class that describes an interface
 
 
 class Parser {
 private:
-    Database *db ; // Database class that the data is stored to
 public:
     Parser(Database *);
-    virtual void parseFile(std::string &) = 0 ; // Parses the given file
+    void parseFile(std::string &) ; // Parses the given file
     ~Parser();
 protected:
+    Database *db ; // Database class that the data is stored to
 
 };
 
