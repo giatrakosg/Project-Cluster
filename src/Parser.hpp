@@ -15,7 +15,7 @@
 #include <fstream>
 #include <sstream>
 #include "Vector.hpp"
-
+#include "Curve.hpp"
 using namespace std ;
 // Pure virtual class that describes an interface
 

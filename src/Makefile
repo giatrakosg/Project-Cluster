@@ -1,7 +1,7 @@
-OBJS = CMDParser.o main.o Parser.o Database.o Item.o Vector.o
-TESTOBJS = CMDParser.o  Parser.o Database.o Item.o Vector.o test.o
-SOURCE = CMDParser.cpp main.cpp Parser.cpp Database.cpp Item.cpp Vector.cpp test.cpp
-HEADER = CMDParser.hpp main.hpp Parser.hpp Database.hpp Item.hpp Vector.hpp
+OBJS = CMDParser.o main.o Parser.o Database.o Item.o Vector.o Curve.o
+TESTOBJS = CMDParser.o  Parser.o Database.o Item.o Vector.o test.o Curve.o
+SOURCE = CMDParser.cpp main.cpp Parser.cpp Database.cpp Item.cpp Vector.cpp test.cpp Curve.cpp
+HEADER = CMDParser.hpp main.hpp Parser.hpp Database.hpp Item.hpp Vector.hpp Curve.hpp
 OUT = cluster test
 CC = g++
 FLAGS = -g -c -std=c++11
@@ -24,6 +24,8 @@ Item.o : Item.cpp
 		$(CC) $(FLAGS) Item.cpp
 Vector.o : Vector.cpp
 		$(CC) $(FLAGS) Vector.cpp
+Curve.o : Curve.cpp
+		$(CC) $(FLAGS) Curve.cpp
 
 clean:
 		rm -f $(OBJS) $(OUT) out
