@@ -4,6 +4,7 @@
 #include "../src/Database.hpp"
 #include "../src/Item.hpp"
 #include "../src/Parser.hpp"
+#include "../src/ConfParser.hpp"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -53,4 +54,14 @@ TEST_CASE ("parsing curve data") {
     }
     REQUIRE(db.getSize() == 100) ;
     REQUIRE(db.getItem("6")->isEqual(c1));
+}
+TEST_CASE ("parsing config file") {
+    std::string config_file ("./data/test_cluster.conf");
+    int a , b , c , d ;
+    ConfParser parser(config_file) ;
+    parser.parseConfig(a,b,c,d);
+    REQUIRE(a == 5) ;
+    REQUIRE(b == 10) ;
+    REQUIRE(c == 2) ;
+    REQUIRE(d == 3) ;
 }
