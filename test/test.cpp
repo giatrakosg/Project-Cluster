@@ -1,6 +1,8 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
 #include "../src/Vector.hpp"
+#include "../src/Database.hpp"
+#include "../src/Item.hpp"
 
 #include <vector>
 #include <iostream>
@@ -14,5 +16,12 @@ TEST_CASE( "storing vectors" ) {
     Vector v2 ("p2",p2);
     Vector v3 ("p3",p3);
     std::cout << v1 << " " << v2 << " " << v3 << std::endl ;
+
+    Database db ;
+    db.addItem(&v1);
+    db.addItem(&v2);
+    db.addItem(&v3);
+    REQUIRE(db.getSize() == 3) ;
+    REQUIRE(db.getItem("p1")->isEqual(v1));
 
 }
