@@ -1,14 +1,18 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
+#include "../src/Vector.hpp"
 
-unsigned int Factorial( unsigned int number ) {
-    return number <= 1 ? number : Factorial(number-1)*number;
-}
+#include <vector>
+#include <iostream>
+#include <string>
 
-TEST_CASE( "Factorials are computed", "[factorial]" ) {
-    REQUIRE( Factorial(0) == 1 );
-    REQUIRE( Factorial(1) == 1 );
-    REQUIRE( Factorial(2) == 2 );
-    REQUIRE( Factorial(3) == 6 );
-    REQUIRE( Factorial(10) == 3628800 );
+TEST_CASE( "storing vectors" ) {
+    std::vector<double> p1 {1.0,2.3,5.9} ;
+    std::vector<double> p2 {1.3,2.3,2.2,3.1};
+    std::vector<double> p3 {0,0};
+    Vector v1 ("p1",p1);
+    Vector v2 ("p2",p2);
+    Vector v3 ("p3",p3);
+    std::cout << v1 << " " << v2 << " " << v3 << std::endl ;
+
 }
