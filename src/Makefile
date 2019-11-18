@@ -1,4 +1,4 @@
-OBJS = CMDParser.o main.o Parser.o Database.o VectorParser.o Item.o Vector.o test.o
+OBJS = CMDParser.o main.o Parser.o Database.o VectorParser.o Item.o Vector.o
 TESTOBJS = CMDParser.o  Parser.o Database.o VectorParser.o Item.o Vector.o test.o
 SOURCE = CMDParser.cpp main.cpp Parser.cpp Database.cpp VectorParser.cpp Item.cpp Vector.cpp test.cpp
 HEADER = CMDParser.hpp main.hpp Parser.hpp Database.hpp VectorParser.hpp Item.hpp Vector.hpp

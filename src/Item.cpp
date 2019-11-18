@@ -9,4 +9,7 @@
 #include "Item.hpp"
 
 Item::Item(std::string id) : id(id)  {}
+std::string Item::getId(void) {
+    return id ;
+}
 Item::~Item() {}

@@ -19,6 +19,8 @@ class Item {
 private:
 public:
     Item(std::string );
+    std::string getId(void) ;
+    virtual bool isEqual(Item &) = 0 ;// Returns if 2 items are equal
     ~Item();
 protected:
     std::string id ; // Item id

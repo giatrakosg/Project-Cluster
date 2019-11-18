@@ -17,7 +17,7 @@
 
 using namespace std ;
 
-class Vector : Item {
+class Vector : public Item {
 private:
     std::vector<double> coordinates ;
 public:
@@ -29,7 +29,9 @@ public:
     }
     os << "]\n" ;
     return os ;
-}
+    }
+    bool isEqual(Item &q) ;
+
 
     ~Vector();
 protected:
