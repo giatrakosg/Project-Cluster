@@ -45,7 +45,8 @@ private:
     // of items
     std::map<int, Item *> representative; // Map that matches each cluster to each
     // representative center
-    std::map<int, int> assigned; // Map that matches each item to its cluster
+    std::map<int,int> medoid_repr ; // Used when medoid representation
+    std::map<int, std::vector<int>> assigned; // Map that matches each cluster to its assigned points
 
     std::default_random_engine generator;
 

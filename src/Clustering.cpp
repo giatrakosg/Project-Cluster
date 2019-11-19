@@ -45,11 +45,21 @@ void Clustering::random_init(void) {
         // Add the the generated object to the representative map
         representative.insert(std::pair<int,Item *> (selected,m));
         selected++;
+        // In case of medoid representation we store the index of the selected
+        if (flags[2] == 0) {
+            medoid_repr[selected] = index ;
+        }
     }
 
 }
 void Clustering::kmeans_init(void) {}
 void Clustering::lloyd_assign(void) {
+    // Clear out previous assignments
+    for (auto & x : assigned)
+    {
+        x.second.clear();
+    }
+
     for (size_t i = 0; i < db->getSize(); i++) {
         double min_dist = - INFINITY ;
         int min_index = -1 ;
@@ -60,11 +70,34 @@ void Clustering::lloyd_assign(void) {
                 min_dist = d_to_c ;
             }
         }
-        assigned[i] = min_index ;
+        assigned[min_index].push_back(i) ;
     }
 }
 void Clustering::range_search_assign(void) {}
-void Clustering::pam_update(void) {}
+void Clustering::pam_update(void) {
+    // We iterate through each cluster and update the medoid
+    for (auto & x : assigned)
+    {
+        std::vector<int> &items = x.second ;
+        double min_total_dist = - INFINITY ;
+        int min_index = -1 ;
+        for (size_t i = 0; i < items.size(); i++) {
+            double total_dist = 0 ;
+            int index1 = items[i];
+            for (size_t j = 0; j < items.size(); j++) {
+                int index2 = items[j] ;
+                total_dist += dist[pair<int,int>(index1,index2)] ; // We have already calculated the pairwise distances
+            }
+            if (total_dist < min_total_dist) {
+                min_total_dist = total_dist ;
+                min_index = index1 ;
+            }
+        }
+        representative[x.first] = db->getItem(min_index);
+        medoid_repr[x.first] = min_index ;
+    }
+
+}
 void Clustering::mean_update(void){}
 
 void Clustering::init(void) {
