@@ -14,7 +14,17 @@ Clustering::Clustering(Database *db,int num_of_clusters ,int init_f,int assign_f
     flags[2] = update_f ;
     std::cout << "Started clustering with \n" <<
     "k=" << k << std::endl ;
+    if (flags[2] == 0) {
+        std::cout << "Calculating pairwise distances...." ;
+        for (size_t i = 0; i < db->getSize(); i++) {
+            for (size_t j = 0; j < db->getSize(); j++) {
+                double d = db->getItem(i)->distance(db->getItem(j));
+                dist[std::pair<int,int> (i,j)] = d ;
+            }
+        }
+        std::cout << "done" << std::endl ;
 
+    }
 }
 void Clustering::random_init(void) {
     // We produce k distinct integers in the [0,n) range that
