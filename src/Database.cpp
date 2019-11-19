@@ -26,4 +26,8 @@ int Database::getSize(void) {
 }
 int Database::getDimension(void) {}
 
-Database::~Database() {}
+Database::~Database() {
+    for (size_t i = 0; i < items.size(); i++) {
+        delete items[i] ;
+    }
+}

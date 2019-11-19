@@ -61,7 +61,7 @@ void Clustering::lloyd_assign(void) {
     }
 
     for (size_t i = 0; i < db->getSize(); i++) {
-        double min_dist = - INFINITY ;
+        double min_dist = INFINITY ;
         int min_index = -1 ;
         for (size_t j = 0; j < k; j++) {
             double d_to_c = db->getItem(i)->distance(representative[j]);
@@ -79,7 +79,7 @@ void Clustering::pam_update(void) {
     for (auto & x : assigned)
     {
         std::vector<int> &items = x.second ;
-        double min_total_dist = - INFINITY ;
+        double min_total_dist = INFINITY ;
         int min_index = -1 ;
         for (size_t i = 0; i < items.size(); i++) {
             double total_dist = 0 ;
@@ -123,21 +123,20 @@ void Clustering::update(void) {
 }
 void Clustering::runClustering(void) {
     init();
-    /*
     for (size_t i = 0; i < MAX_ITERATIONS; i++) {
         assign();
         update();
     }
-    */
+
 
 }
 void Clustering::printRepresentatives(void) {
     for (auto const& x : representative)
     {
-        Item * x_it = x.second;
+        //Item * x_it = x.second;
         std::cout << x.first  // string (key)
                   << ':'
-                  << x_it->getId() // string's value
+                  << x.second->getId() // string's value
                   << std::endl ;
     }
 }

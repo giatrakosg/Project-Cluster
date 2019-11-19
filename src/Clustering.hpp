@@ -18,7 +18,7 @@
 #include "Database.hpp"
 #include "Item.hpp"
 
-#define MAX_ITERATIONS 100
+#define MAX_ITERATIONS 20
 
 using namespace std ;
 
