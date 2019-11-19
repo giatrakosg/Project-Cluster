@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 using namespace std ;
 
@@ -32,8 +33,10 @@ public:
     return os ;
     }
     bool isEqual(Item &q) ;
-    void addPoint(double );
 
+    double distance(Item &);
+    void addPoint(double );
+    std::vector<double>& getCoordinates() ;
     ~Vector();
 protected:
 

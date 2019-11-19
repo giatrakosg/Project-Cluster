@@ -35,7 +35,7 @@ TEST_CASE ("parsing vector data" ) {
     parser.parseFile(input_file);
     std::vector<double> p1 {1.0,2.3,5.9} ;
     Vector v1 ("p1",p1);
-    REQUIRE(db.getSize() == 3) ;
+    REQUIRE(db.getSize() == 14) ;
     REQUIRE(db.getItem("p1")->isEqual(v1));
 
 }
@@ -65,6 +65,14 @@ TEST_CASE ("parsing config file") {
     REQUIRE(b == 10) ;
     REQUIRE(c == 2) ;
     REQUIRE(d == 3) ;
+}
+TEST_CASE ("Vector distance") {
+    std::vector<double> p1 {1.0,2.3,6.9} ;
+    std::vector<double> p2 {1.5,2.3,2.9};
+    Vector v1 ("p1",p1);
+    Vector v2 ("p2",p2);
+    double dis = v1.distance(v2);
+    REQUIRE(dis == 4.5);
 }
 TEST_CASE("Clustering initialization") {
     Database db ;

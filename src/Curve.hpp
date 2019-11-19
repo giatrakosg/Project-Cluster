@@ -39,6 +39,7 @@ public:
     }
     bool isEqual(Item &q) ;
     void addPoint(double ,double );
+    double distance(Item &q) {}
 
     ~Curve();
 protected:
