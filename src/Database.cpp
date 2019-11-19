@@ -15,12 +15,11 @@ void Database::addItem(Item *t) {
     map.insert(std::pair<string,int> (t->getId(),index));
 }
 Item * Database::getItem(std::string qid) {
-    for (size_t i = 0; i < items.size(); i++) {
-        if (items[i]->getId() == qid) {
-            return items[i];
-        }
-    }
-    return NULL ;
+    int index = map[qid];
+    return items[index];
+}
+Item * Database::getItem(int qind) {
+    return items[qind];
 }
 int Database::getSize(void) {
     return items.size();
