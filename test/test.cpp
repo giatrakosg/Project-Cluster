@@ -5,6 +5,7 @@
 #include "../src/Item.hpp"
 #include "../src/Parser.hpp"
 #include "../src/ConfParser.hpp"
+#include "../src/Clustering.hpp"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -64,4 +65,13 @@ TEST_CASE ("parsing config file") {
     REQUIRE(b == 10) ;
     REQUIRE(c == 2) ;
     REQUIRE(d == 3) ;
+}
+TEST_CASE("Clustering initialization") {
+    Database db ;
+    Parser parser(&db);
+    std::string input_file ("./data/test_vector_small_id.dat");
+    parser.parseFile(input_file);
+    Clustering cluster (&db,5,0,0,0) ;
+    cluster.runClustering();
+    cluster.printRepresentatives();
 }
