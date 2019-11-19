@@ -66,13 +66,33 @@ TEST_CASE ("parsing config file") {
     REQUIRE(c == 2) ;
     REQUIRE(d == 3) ;
 }
-TEST_CASE ("Vector distance") {
+TEST_CASE ("Item distance") {
     std::vector<double> p1 {1.0,2.3,6.9} ;
     std::vector<double> p2 {1.5,2.3,2.9};
     Vector v1 ("p1",p1);
     Vector v2 ("p2",p2);
-    double dis = v1.distance(v2);
+    double dis = v1.distance(&v2);
     REQUIRE(dis == 4.5);
+
+    Curve c1 ("c1");
+    c1.addPoint(0,0);
+    c1.addPoint(1,1);
+    c1.addPoint(1,1);
+    Curve c2 ("c2");
+    c2.addPoint(0,1);
+    c2.addPoint(1,0);
+
+
+    Curve c3 ("c3");
+    c3.addPoint(0,1);
+    c3.addPoint(1,0);
+
+    REQUIRE(c1.distance(&c2) == 3);
+    REQUIRE(c3.distance(&c2) == 0);
+    REQUIRE(c3.distance(&c3) == 0);
+
+
+
 }
 TEST_CASE("Clustering initialization") {
     Database db ;

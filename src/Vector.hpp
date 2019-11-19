@@ -34,7 +34,7 @@ public:
     }
     bool isEqual(Item &q) ;
 
-    double distance(Item &);
+    double distance(Item *);
     void addPoint(double );
     std::vector<double>& getCoordinates() ;
     ~Vector();

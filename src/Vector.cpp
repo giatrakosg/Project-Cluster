@@ -20,10 +20,10 @@ bool Vector::isEqual(Item &q ) {
 void Vector::addPoint(double p) {
     coordinates.push_back(p);
 }
-double Vector::distance(Item &q) {
+double Vector::distance(Item *q) {
     // manhattan distance of the 2 vectors
-    Vector &p = dynamic_cast<Vector &> (q) ;
-    std::vector<double> qcoordinates = p.getCoordinates();
+    Vector *p = dynamic_cast<Vector *> (q) ;
+    std::vector<double> qcoordinates = p->getCoordinates();
     double sum = 0 ;
     for (size_t i = 0; i < coordinates.size(); i++) {
         sum += abs(coordinates[i] - qcoordinates[i]);

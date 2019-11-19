@@ -14,6 +14,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <math.h>
+
 
 using namespace std ;
 
@@ -21,6 +23,13 @@ struct Point {
     double x ;
     double y ;
     Point(double x,double y) : x(x) , y(y) {}
+    double dist(Point *p) {
+        return sqrt((abs(p->x - x)*abs(p->x - x) + abs(p->y - y)*abs(p->y - y))) ; // euclidian distance
+        // see https://eclass.uoa.gr/modules/forum/viewtopic.php?course=DI352&topic=22350&forum=33439
+    }
+    friend bool operator==(const Point& lhs, const Point& rhs){
+        return (lhs.x == rhs.x) && (lhs.y == rhs.y) ;
+    }
 };
 
 
@@ -37,10 +46,12 @@ public:
     os << "]\n" ;
     return os ;
     }
+    Point * getPoint(int );
     bool isEqual(Item &q) ;
     void addPoint(double ,double );
-    double distance(Item &q) {}
+    int getSize();
 
+    double distance(Item *q) ;
     ~Curve();
 protected:
 
