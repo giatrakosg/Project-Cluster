@@ -43,7 +43,7 @@ private:
     // for init , assign and update given by user
     std::map<pair<int,int> , double> dist; // Map with distances of each pair
     // of items
-    std::map<int, int> representative; // Map that matches each cluster to each
+    std::map<int, Item *> representative; // Map that matches each cluster to each
     // representative center
     std::map<int, int> assigned; // Map that matches each item to its cluster
 

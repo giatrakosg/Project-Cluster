@@ -31,14 +31,28 @@ void Clustering::random_init(void) {
             continue ;
         }
         used.insert(index);
+        Item *m = db->getItem(index);
         // Add the the generated object to the representative map
-        representative.insert(std::pair<int,int> (selected,index));
+        representative.insert(std::pair<int,Item *> (selected,m));
         selected++;
     }
 
 }
 void Clustering::kmeans_init(void) {}
-void Clustering::lloyd_assign(void) {}
+void Clustering::lloyd_assign(void) {
+    for (size_t i = 0; i < db->getSize(); i++) {
+        double min_dist = - INFINITY ;
+        int min_index = -1 ;
+        for (size_t j = 0; j < k; j++) {
+            double d_to_c = db->getItem(i)->distance(representative[j]);
+            if (d_to_c < min_dist) {
+                min_index = j ;
+                min_dist = d_to_c ;
+            }
+        }
+        assigned[i] = min_index ;
+    }
+}
 void Clustering::range_search_assign(void) {}
 void Clustering::pam_update(void) {}
 void Clustering::mean_update(void){}
@@ -77,7 +91,7 @@ void Clustering::runClustering(void) {
 void Clustering::printRepresentatives(void) {
     for (auto const& x : representative)
     {
-        Item * x_it = db->getItem(x.second);
+        Item * x_it = x.second;
         std::cout << x.first  // string (key)
                   << ':'
                   << x_it->getId() // string's value
