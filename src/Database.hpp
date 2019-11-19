@@ -13,10 +13,14 @@
 #include "Item.hpp"
 #include <string>
 #include <vector>
+#include <map>
+
+using namespace std ;
 
 class Database {
 private:
     std::vector<Item *> items;
+    std::map<string, int> map; // We map each string to an int for accessing the database through indexing 
 public:
     Database();
     void printItem(std::string ); // Prints the item stored with that string id
