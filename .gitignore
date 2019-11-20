@@ -1,4 +1,4 @@
-data/
+data/*
 test/test
 src/cluster
 src/*.o
