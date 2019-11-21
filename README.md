@@ -35,26 +35,38 @@ Clustering(..,0,0,0) επιλεγονται οι [random select ,lloyd assign,pa
 Clustering(..,1,0,0) επιλεγονται οι [kmeans++ ,lloyd assign,pam a'la lloyd update]
 
 #Compile
+
 Στον φακελο src/
+
     $ make cluster
+
 Για την δημιουργια των unit test
+
     $ make test
 
 # Run
+
 Στον φακελο src
+
     $ ./cluster -i [input file] -c [config file] -o [output file]
+
 Για τα test . Στον φακελο test/
+
     $ ./test
+
 Περιλαμβανονται και δοκιμαστικα test data
 
 #Unit Testing
+
 Το unit testing γινεται με χρηση της βιβλιοθηκης catch2(https://github.com/catchorg/Catch2).
 Η βιβλιοθηκη επιλεχτηκε λογω της ευκολης χρησης της . Ειναι header only οποτε δεν χρειαζεται
 η εγκατσταση καποιου πακετου.
 
 #Version Control
+
 Εγινε χρηση του git
 
 #Συμμετεχοντες
+
 sdi1600036 - Γιατρακος Γεωργιος
 sdi1400134 - Παμποριδης Στεφανος

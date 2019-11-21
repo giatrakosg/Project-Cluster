@@ -99,7 +99,7 @@ TEST_CASE("Clustering initialization") {
     Parser parser(&db);
     std::string input_file ("./data/test_vector_small_id.dat");
     parser.parseFile(input_file);
-    Clustering cluster (&db,5,0,0,0) ;
+    Clustering cluster (&db,false,5,0,0,0) ;
     cluster.runClustering();
     cluster.printRepresentatives();
 }

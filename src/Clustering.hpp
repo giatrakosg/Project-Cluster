@@ -38,6 +38,8 @@ private:
 
     int k ; // The number of clusters k
 
+    bool isCurve ; // True if our objects are curves
+
     Database *db ; // Database with points
     int flags[3] ; // Flags used to determine which algorithms are used
     // for init , assign and update given by user
@@ -51,7 +53,7 @@ private:
     std::default_random_engine generator;
 
 public:
-    Clustering(Database *,int ,int ,int ,int ); // Database with data points
+    Clustering(Database *,bool ,int ,int ,int ,int ); // Database with data points
     // Followed by k and sequence of [0,1,0] etc that selects the init , assign and update
     // algorithms respectively
     void runClustering(); // Function called by main

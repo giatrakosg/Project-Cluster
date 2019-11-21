@@ -8,7 +8,7 @@
 
 #include "Clustering.hpp"
 
-Clustering::Clustering(Database *db,int num_of_clusters ,int init_f,int assign_f,int update_f) : db(db) , k(num_of_clusters){
+Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init_f,int assign_f,int update_f) : db(db) , k(num_of_clusters) , isCurve(isCurve){
     flags[0] = init_f ;
     flags[1] = assign_f ;
     flags[2] = update_f ;
