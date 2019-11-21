@@ -15,7 +15,7 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
-
+#include <random>
 
 using namespace std ;
 
@@ -50,7 +50,7 @@ public:
     bool isEqual(Item &q) ;
     void addPoint(double ,double );
     int getSize();
-
+    Curve * random_subsequence(int ); // We produce a random subsequence of this curve with length
     double distance(Item *q) ;
     ~Curve();
 protected:

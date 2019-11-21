@@ -14,9 +14,14 @@
 #include <utility>
 #include <random>
 #include <set>
+#include <algorithm>
 
 #include "Database.hpp"
 #include "Item.hpp"
+#include "Curve.hpp"
+#include "Vector.hpp"
+
+#define private public
 
 #define MAX_ITERATIONS 20
 
@@ -29,6 +34,12 @@ private:
     void kmeans_init(); // K-means++ selectionof first K items
     void lloyd_assign(); // Lloyd assignment
     void range_search_assign(); // Assignment by Range search
+
+    Curve * init_dba(std::vector<Curve *> &);
+    // implementation of the dba algorithm for computing
+    // a mean curve of a set of curves
+    Curve * dba(std::vector<Curve *> );
+
     void pam_update(); // Update using PAM (lloyds)
     void mean_update(); // Update using mean vectors / curve
 

@@ -36,7 +36,17 @@ double min3(double x ,double y , double z) {
         return y ;
     }
 }
+Curve * Curve::random_subsequence(int l) {
+    std::uniform_int_distribution<int> dis(0,this->getSize() - 1);
+    std::default_random_engine generator;
+    Curve *Sl = new Curve("rs");
+    for (size_t i = 0; i < l; i++) {
+        int index = dis(generator);
+        Sl->addPoint(points[index]->x,points[index]->y);
+    }
+    return Sl ;
 
+}
 double Curve::distance(Item *p) {
     Curve *q = dynamic_cast<Curve *> (p) ;
     int n = this->getSize();

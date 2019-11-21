@@ -52,6 +52,31 @@ void Clustering::random_init(void) {
     }
 
 }
+Curve * Clustering::init_dba(std::vector<Curve *> &Sn) {
+    double mean_length = 0 ;
+    int num_curves = Sn.size() ;
+    for (size_t i = 0; i < Sn.size(); i++) {
+        mean_length += Sn[i]->getSize() / (double) num_curves ;
+    }
+    // We count the number of curves with length greater that the mean
+    int num_gt_mean = std::count_if(Sn.begin(),Sn.end(),
+    [mean_length](Curve *c) {
+        return c->getSize() >= mean_length;
+    });
+    // Sort the vector of Curves by descending order
+    std::sort(Sn.begin(),Sn.end(),
+    [] (Curve *a,Curve *b) {
+        return a->getSize() > b->getSize() ;
+    });
+    // We produce the index of the randomly selected curve
+    std::uniform_int_distribution<int> dis(0,num_gt_mean-1);
+    int rind = dis(generator);
+    Curve * s0 = Sn[rind]->random_subsequence(mean_length);
+    return s0 ;
+    // We have selected a random sequence whose length is greater or equal to the mean length of all curves
+    // Now we must create a random subsequence of s0 with length = mean_length
+
+}
 void Clustering::kmeans_init(void) {}
 void Clustering::lloyd_assign(void) {
     // Clear out previous assignments
