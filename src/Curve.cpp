@@ -67,6 +67,69 @@ double Curve::distance(Item *p) {
     return DTW[n][m];
 
 }
+// See https://nipunbatra.github.io/blog/2014/dtw.html
+// Section [19]
+std::vector<std::pair<int,int>> Curve::dtwBestTraversal(Curve *q) {
+    /*
+        path = [[len(x)-1, len(y)-1]]
+        i = len(y)-1
+        j = len(x)-1
+        while i>0 and j>0:
+            if i==0:
+                j = j - 1
+            elif j==0:
+                i = i - 1
+            else:
+                if accumulated_cost[i-1, j] == min(accumulated_cost[i-1, j-1], accumulated_cost[i-1, j], accumulated_cost[i, j-1]):
+                    i = i - 1
+                elif accumulated_cost[i, j-1] == min(accumulated_cost[i-1, j-1], accumulated_cost[i-1, j], accumulated_cost[i, j-1]):
+                    j = j-1
+                else:
+                    i = i - 1
+                    j= j- 1
+            path.append([j, i])
+        path.append([0,0])
+    */
+    int n = this->getSize();
+    int m = q->getSize() ;
+    double DTW[n+1][m+1] ; // Array with distances
+    for (size_t i = 0; i < n+1; i++) {
+        for (size_t j = 0; j < m+1; j++) {
+            DTW[i][j] = INFINITY ;
+        }
+    }
+    DTW[0][0] = 0 ;
+    for (size_t i = 1; i < n+1; i++) {
+        for (size_t j = 1; j < m+1; j++) {
+            double cost = (q->getPoint(j-1))->dist((points[i-1]));
+            DTW[i][j] = cost + min3(DTW[i-1][j],DTW[i][j-1],DTW[i-1][j-1]);
+        }
+    }
+
+
+
+    std::vector<std::pair<int,int>> path;
+    int i = this->getSize();
+    int j = q->getSize();
+    while((i > 0) && (j > 0)) {
+        if (i == 0) {
+            j--;
+        } else if(j == 0) {
+            i--;
+        } else {
+            if (DTW[i-1][j] == min3(DTW[i-1][j-1],DTW[i-1][j],DTW[i][j-1])) {
+                i--;
+            } else if(DTW[i][j-1] == min3(DTW[i-1][j-1],DTW[i-1][j],DTW[i][j-1])) {
+                j--;
+            } else {
+                i--;
+                j--;
+            }
+        }
+        path.push_back(pair<int,int>(i,j));
+    }
+    return path ;
+}
 Curve::~Curve() {
     for (size_t i = 0; i < points.size(); i++) {
         delete points[i] ;

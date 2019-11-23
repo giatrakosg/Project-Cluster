@@ -75,21 +75,33 @@ TEST_CASE ("Item distance") {
     REQUIRE(dis == 4.5);
 
     Curve c1 ("c1");
+    c1.addPoint(1,0);
+    c1.addPoint(1,0);
+    c1.addPoint(2,0);
+    c1.addPoint(3,0);
+    c1.addPoint(2,0);
     c1.addPoint(0,0);
-    c1.addPoint(1,1);
-    c1.addPoint(1,1);
+
+
     Curve c2 ("c2");
-    c2.addPoint(0,1);
+    c2.addPoint(0,0);
+    c2.addPoint(1,0);
+    c2.addPoint(1,0);
+    c2.addPoint(2,0);
+    c2.addPoint(3,0);
+    c2.addPoint(1,0);
     c2.addPoint(1,0);
 
 
     Curve c3 ("c3");
     c3.addPoint(0,1);
     c3.addPoint(1,0);
+    Curve c4 ("c4");
+    c4.addPoint(0,1);
+    c4.addPoint(1,0);
 
     REQUIRE(c1.distance(&c2) == 3);
-    REQUIRE(c3.distance(&c2) == 0);
-    REQUIRE(c3.distance(&c3) == 0);
+    REQUIRE(c3.distance(&c4) == 0);
 
 
 
@@ -103,6 +115,37 @@ TEST_CASE("Clustering initialization") {
     cluster.runClustering();
     cluster.printRepresentatives();
 }
+TEST_CASE("DTW_BEST_TRAVERSAL") {
+    Curve c1 ("c1");
+    c1.addPoint(1,0);
+    c1.addPoint(1,0);
+    c1.addPoint(2,0);
+    c1.addPoint(3,0);
+    c1.addPoint(2,0);
+    c1.addPoint(0,0);
+
+
+    Curve c2 ("c2");
+    c2.addPoint(0,0);
+    c2.addPoint(1,0);
+    c2.addPoint(1,0);
+    c2.addPoint(2,0);
+    c2.addPoint(3,0);
+    c2.addPoint(1,0);
+    c2.addPoint(1,0);
+    auto x = c1.dtwBestTraversal(&c2);
+    std::vector<pair<int,int>> outp;
+    outp.push_back(std::pair<int,int>(5,6));
+    outp.push_back(std::pair<int,int>(4,5));
+    outp.push_back(std::pair<int,int>(3,4));
+    outp.push_back(std::pair<int,int>(2,3));
+    outp.push_back(std::pair<int,int>(1,3));
+    outp.push_back(std::pair<int,int>(1,2));
+    outp.push_back(std::pair<int,int>(1,1));
+    outp.push_back(std::pair<int,int>(0,0));
+    REQUIRE(x == outp);
+}
+
 TEST_CASE("DBA") {
     Database db ;
     Parser parser(&db);

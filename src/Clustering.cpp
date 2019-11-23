@@ -77,6 +77,16 @@ Curve * Clustering::init_dba(std::vector<Curve *> &Sn) {
     // Now we must create a random subsequence of s0 with length = mean_length
 
 }
+Curve * Clustering::dba(std::vector<Curve *> Sn) {
+    Curve *C = init_dba(Sn);
+    int lambda = C->getSize();
+    while (1) {
+        Curve *C_prime = C ;
+        for (size_t i = 0; i < Sn.size(); i++) {
+
+        }
+    }
+}
 void Clustering::kmeans_init(void) {}
 void Clustering::lloyd_assign(void) {
     // Clear out previous assignments
