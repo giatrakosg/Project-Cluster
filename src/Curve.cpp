@@ -15,9 +15,24 @@ bool Curve::isEqual(Item &q ) {
     // TODO implement point for point comparison
     return idcmp ;
 }
+bool Curve::isEqual(Curve *q) {
+    //std::cout << "isEqual" << std::endl ;
+    if (q->getSize() != this->getSize()) {
+        return false ;
+    }
+    for (size_t i = 0; i < q->getSize(); i++) {
+        if (q->getPoint(i) != this->getPoint(i)) {
+            return false ;
+        }
+    }
+    return true ;
+}
 void Curve::addPoint(double px,double py) {
     Point *p = new Point(px,py);
     points.push_back(p);
+}
+void Curve::addPoint(Point *m) {
+    points.push_back(m);
 }
 int Curve::getSize() {
     return points.size();
@@ -109,8 +124,8 @@ std::vector<std::pair<int,int>> Curve::dtwBestTraversal(Curve *q) {
 
 
     std::vector<std::pair<int,int>> path;
-    int i = this->getSize();
-    int j = q->getSize();
+    int i = this->getSize() - 1;
+    int j = q->getSize() - 1;
     while((i > 0) && (j > 0)) {
         if (i == 0) {
             j--;
@@ -126,9 +141,17 @@ std::vector<std::pair<int,int>> Curve::dtwBestTraversal(Curve *q) {
                 j--;
             }
         }
-        path.push_back(pair<int,int>(i,j));
+        path.push_back(pair<int,int>(j,i));
     }
     return path ;
+}
+void Curve::clear(void) {
+    /*
+    for (size_t i = 0; i < points.size(); i++) {
+        delete points[i] ;
+    }
+    */
+    points.clear();
 }
 Curve::~Curve() {
     for (size_t i = 0; i < points.size(); i++) {

@@ -77,15 +77,58 @@ Curve * Clustering::init_dba(std::vector<Curve *> &Sn) {
     // Now we must create a random subsequence of s0 with length = mean_length
 
 }
+Point * Clustering::meanPoint(std::vector<Point *> m) {
+    double sumx = 0;
+    double sumy = 0;
+    int n = m.size();
+    for (size_t i = 0; i < m.size(); i++) {
+        sumx += m[i]->x;
+        sumy += m[i]->y;
+    }
+    Point *k = new Point(sumx/n,sumy/n);
+    return k ;
+}
 Curve * Clustering::dba(std::vector<Curve *> Sn) {
     Curve *C = init_dba(Sn);
     int lambda = C->getSize();
-    while (1) {
-        Curve *C_prime = C ;
-        for (size_t i = 0; i < Sn.size(); i++) {
-
+    int iterations = MAX_MEAN_ITER ;
+    while (iterations>0) {
+        Curve *C_prime = new Curve(C->getId()) ;
+        for (size_t i = 0; i < C->getSize(); i++) {
+            Point *m = C->getPoint(i);
+            C_prime->addPoint(m->x,m->y);
         }
+        std::vector<std::vector<Point *>> A;
+        for (size_t i = 0; i < lambda; i++) {
+            A.push_back(std::vector<Point *>());
+        }
+
+        for (size_t i = 0; i < Sn.size(); i++) {
+            auto lpairs = C->dtwBestTraversal(Sn[i]);
+            for (auto &p : lpairs) {
+                /*
+                if (p.second >= Sn[i]->getSize()) {
+                    printf("Error\n");
+                }
+                */
+                A[p.second].push_back(Sn[i]->getPoint(p.first));
+            }
+        }
+        C->clear();
+        //Curve *C2 = new Curve("c2") ;
+        for (size_t i = 0; i < A.size(); i++) {
+            Point * np = meanPoint(A[i]);
+            C->addPoint(np->x,np->y);
+        }
+        //C->clear();
+        //C = C2 ;
+        if (C->isEqual(C_prime)) {
+            //delete C_prime;
+            break ;
+        }
+        iterations--;
     }
+    return C ;
 }
 void Clustering::kmeans_init(void) {}
 void Clustering::lloyd_assign(void) {
@@ -133,7 +176,18 @@ void Clustering::pam_update(void) {
     }
 
 }
-void Clustering::mean_update(void){}
+void Clustering::mean_update(void){
+    if (isCurve) {
+        for (auto &cluster : assigned) {
+            std::vector<Curve *> curves;
+            for (size_t i = 0; i < cluster.second.size(); i++) {
+                curves.push_back(dynamic_cast<Curve *> (db->getItem(cluster.second.at(i)))) ;
+                auto nm = dba(curves);
+                representative[cluster.first] = nm ;
+            }
+        }
+    }
+}
 
 void Clustering::init(void) {
     if (flags[0] == 0) {

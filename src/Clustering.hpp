@@ -23,7 +23,8 @@
 
 #define private public
 
-#define MAX_ITERATIONS 20
+#define MAX_ITERATIONS 1
+#define MAX_MEAN_ITER 1
 
 using namespace std ;
 
@@ -39,6 +40,7 @@ private:
     // implementation of the dba algorithm for computing
     // a mean curve of a set of curves
     Curve * dba(std::vector<Curve *> );
+    Point * meanPoint(std::vector<Point *> );
 
     void pam_update(); // Update using PAM (lloyds)
     void mean_update(); // Update using mean vectors / curve
