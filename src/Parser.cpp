@@ -16,6 +16,9 @@ void Parser::parseFile(std::string &input_file) {
     // We extract the first line to determine if it is a vector or curve file
     std::string         flag;
     std::getline(file, flag);
+    if (flag.back() == '\r') {
+        flag.pop_back();
+    }
     if (flag == "vectors") {
         std::cout << "Parsing vector file " << std::endl ;
         while (!file.eof()) {
@@ -81,17 +84,19 @@ void Parser::parseFile(std::string &input_file) {
             // now we retrieve every point of the curve
             std::vector<std::pair<double,double>> temp;
             std::pair<double,double> p ;
-            while(std::getline(lineStream, cell, ')'))
-            {
+            for (size_t i = 0; i < npoints; i++) {
+                std::getline(lineStream, cell, ')');
                 std::string point1 ;
                 std::string point2 ;
 
                 cell.erase(cell.begin()); // Remove '('
-                cell.erase(cell.begin()); // Remove '('
+                //cell.erase(cell.begin()); // Remove '('
                 std::stringstream   cellStream(cell);
-                //std::cout << cell << '\n';
                 std::getline(cellStream,point1,',');
                 std::getline(cellStream,point2);
+                point1.erase(point1.begin());
+
+                point2.pop_back();
                 p.first  = std::stod(point1);
                 p.second = std::stod(point2);
                 temp.push_back(p);

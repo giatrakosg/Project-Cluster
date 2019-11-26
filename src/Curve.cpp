@@ -146,11 +146,11 @@ std::vector<std::pair<int,int>> Curve::dtwBestTraversal(Curve *q) {
     return path ;
 }
 void Curve::clear(void) {
-    /*
+
     for (size_t i = 0; i < points.size(); i++) {
         delete points[i] ;
     }
-    */
+    
     points.clear();
 }
 Curve::~Curve() {

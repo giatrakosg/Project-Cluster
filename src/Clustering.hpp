@@ -23,8 +23,8 @@
 
 #define private public
 
-#define MAX_ITERATIONS 1
-#define MAX_MEAN_ITER 1
+#define MAX_ITERATIONS 2
+#define MAX_MEAN_ITER 2
 
 using namespace std ;
 

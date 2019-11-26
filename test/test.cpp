@@ -45,16 +45,16 @@ TEST_CASE ("parsing curve data") {
     */
     Database db ;
     Parser parser(&db);
-    std::string input_file ("./data/trajectories_dataset_smaller.dat");
+    std::string input_file ("../data/curves_clustering/input_projection6.csv");
     parser.parseFile(input_file);
     std::vector<std::pair<double,double>> points ;
 
-    Curve c1 ("6");
-    for (size_t i = 0; i < points.size(); i++) {
-        c1.addPoint(points[i].first,points[i].second);
-    }
-    REQUIRE(db.getSize() == 100) ;
-    REQUIRE(db.getItem("6")->isEqual(c1));
+    Curve *c1 ;
+    c1 = dynamic_cast<Curve *>(db.getItem("4474"));
+
+    REQUIRE(db.getSize() == 1600) ;
+    REQUIRE(c1 != NULL);
+    //REQUIRE(db.getItem("6")->isEqual(c1));
 }
 TEST_CASE ("parsing config file") {
     std::string config_file ("./data/test_cluster.conf");
@@ -109,7 +109,7 @@ TEST_CASE ("Item distance") {
 TEST_CASE("Clustering initialization") {
     Database db ;
     Parser parser(&db);
-    std::string input_file ("./data/test_vector_small_id.dat");
+    std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
     parser.parseFile(input_file);
     Clustering cluster (&db,false,5,0,0,0) ;
     cluster.runClustering();
@@ -135,12 +135,11 @@ TEST_CASE("DTW_BEST_TRAVERSAL") {
     c2.addPoint(1,0);
     auto x = c1.dtwBestTraversal(&c2);
     std::vector<pair<int,int>> outp;
-    outp.push_back(std::pair<int,int>(5,6));
-    outp.push_back(std::pair<int,int>(4,5));
-    outp.push_back(std::pair<int,int>(3,4));
-    outp.push_back(std::pair<int,int>(2,3));
-    outp.push_back(std::pair<int,int>(1,3));
-    outp.push_back(std::pair<int,int>(1,2));
+    outp.push_back(std::pair<int,int>(5,4));
+    outp.push_back(std::pair<int,int>(4,3));
+    outp.push_back(std::pair<int,int>(3,2));
+    outp.push_back(std::pair<int,int>(3,1));
+    outp.push_back(std::pair<int,int>(2,1));
     outp.push_back(std::pair<int,int>(1,1));
     outp.push_back(std::pair<int,int>(0,0));
     REQUIRE(x == outp);
@@ -149,7 +148,7 @@ TEST_CASE("DTW_BEST_TRAVERSAL") {
 TEST_CASE("DBA") {
     Database *db = new Database();
     Parser parser(db);
-    std::string input_file ("./data/trajectories_dataset_smaller.dat");
+    std::string input_file ("../data/curves_clustering/input_projection6.csv");
     parser.parseFile(input_file);
     Clustering cluster (db,true,5,0,0,1) ;
     std::vector<Curve *> curves;
