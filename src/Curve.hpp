@@ -9,6 +9,7 @@
 #ifndef Curve_hpp
 #define Curve_hpp
 
+#include <algorithm>
 #include <stdio.h>
 #include "Item.hpp"
 #include <string>

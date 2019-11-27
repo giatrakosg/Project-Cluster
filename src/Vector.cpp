@@ -28,6 +28,7 @@ double Vector::distance(Item *q) {
     for (size_t i = 0; i < coordinates.size(); i++) {
         sum += abs(coordinates[i] - qcoordinates[i]);
     }
+    return sum ;
 }
 std::vector<double>& Vector::getCoordinates()  {
     return coordinates ;

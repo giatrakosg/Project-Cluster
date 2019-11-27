@@ -84,7 +84,7 @@ void Parser::parseFile(std::string &input_file) {
             // now we retrieve every point of the curve
             std::vector<std::pair<double,double>> temp;
             std::pair<double,double> p ;
-            for (size_t i = 0; i < npoints; i++) {
+            for (int i = 0; i < npoints; i++) {
                 std::getline(lineStream, cell, ')');
                 std::string point1 ;
                 std::string point2 ;

@@ -24,7 +24,7 @@ Item * Database::getItem(int qind) {
 int Database::getSize(void) {
     return items.size();
 }
-int Database::getDimension(void) {}
+int Database::getDimension(void) {return 0;}
 
 Database::~Database() {
     for (size_t i = 0; i < items.size(); i++) {

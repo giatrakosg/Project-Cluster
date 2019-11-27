@@ -20,7 +20,7 @@ bool Curve::isEqual(Curve *q) {
     if (q->getSize() != this->getSize()) {
         return false ;
     }
-    for (size_t i = 0; i < q->getSize(); i++) {
+    for (int i = 0; i < q->getSize(); i++) {
         if (q->getPoint(i) != this->getPoint(i)) {
             return false ;
         }
@@ -41,21 +41,13 @@ Point * Curve::getPoint(int i) {
     return points[i] ;
 }
 double min3(double x ,double y , double z) {
-    if (x < y) {
-        if (x < z) {
-            return x ;
-        } else {
-            return z ;
-        }
-    } else if (y < z){
-        return y ;
-    }
+    return std::min({x, y, z});
 }
 Curve * Curve::random_subsequence(int l) {
     std::uniform_int_distribution<int> dis(0,this->getSize() - 1);
     std::default_random_engine generator;
     Curve *Sl = new Curve("rs");
-    for (size_t i = 0; i < l; i++) {
+    for (int i = 0; i < l; i++) {
         int index = dis(generator);
         Sl->addPoint(points[index]->x,points[index]->y);
     }
@@ -67,14 +59,14 @@ double Curve::distance(Item *p) {
     int n = this->getSize();
     int m = q->getSize() ;
     double DTW[n+1][m+1] ; // Array with distances
-    for (size_t i = 0; i < n+1; i++) {
-        for (size_t j = 0; j < m+1; j++) {
+    for (int i = 0; i < n+1; i++) {
+        for (int j = 0; j < m+1; j++) {
             DTW[i][j] = INFINITY ;
         }
     }
     DTW[0][0] = 0 ;
-    for (size_t i = 1; i < n+1; i++) {
-        for (size_t j = 1; j < m+1; j++) {
+    for (int i = 1; i < n+1; i++) {
+        for (int j = 1; j < m+1; j++) {
             double cost = (q->getPoint(j-1))->dist((points[i-1]));
             DTW[i][j] = cost + min3(DTW[i-1][j],DTW[i][j-1],DTW[i-1][j-1]);
         }
@@ -108,14 +100,14 @@ std::vector<std::pair<int,int>> Curve::dtwBestTraversal(Curve *q) {
     int n = this->getSize();
     int m = q->getSize() ;
     double DTW[n+1][m+1] ; // Array with distances
-    for (size_t i = 0; i < n+1; i++) {
-        for (size_t j = 0; j < m+1; j++) {
+    for (int i = 0; i < n+1; i++) {
+        for (int j = 0; j < m+1; j++) {
             DTW[i][j] = INFINITY ;
         }
     }
     DTW[0][0] = 0 ;
-    for (size_t i = 1; i < n+1; i++) {
-        for (size_t j = 1; j < m+1; j++) {
+    for (int i = 1; i < n+1; i++) {
+        for (int j = 1; j < m+1; j++) {
             double cost = (q->getPoint(j-1))->dist((points[i-1]));
             DTW[i][j] = cost + min3(DTW[i-1][j],DTW[i][j-1],DTW[i-1][j-1]);
         }
@@ -150,7 +142,7 @@ void Curve::clear(void) {
     for (size_t i = 0; i < points.size(); i++) {
         delete points[i] ;
     }
-    
+
     points.clear();
 }
 Curve::~Curve() {

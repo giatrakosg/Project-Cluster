@@ -16,8 +16,8 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
     "k=" << k << std::endl ;
     if (flags[2] == 0) {
         std::cout << "Calculating pairwise distances...." ;
-        for (size_t i = 0; i < db->getSize(); i++) {
-            for (size_t j = 0; j < db->getSize(); j++) {
+        for (int i = 0; i < db->getSize(); i++) {
+            for (int j = 0; j < db->getSize(); j++) {
                 double d = db->getItem(i)->distance(db->getItem(j));
                 dist[std::pair<int,int> (i,j)] = d ;
             }
@@ -94,12 +94,12 @@ Curve * Clustering::dba(std::vector<Curve *> Sn) {
     int iterations = MAX_MEAN_ITER ;
     while (iterations>0) {
         Curve *C_prime = new Curve(C->getId()) ;
-        for (size_t i = 0; i < C->getSize(); i++) {
+        for (int i = 0; i < C->getSize(); i++) {
             Point *m = C->getPoint(i);
             C_prime->addPoint(m->x,m->y);
         }
         std::vector<std::vector<Point *>> A;
-        for (size_t i = 0; i < lambda; i++) {
+        for (int i = 0; i < lambda; i++) {
             A.push_back(std::vector<Point *>());
         }
 
@@ -138,10 +138,10 @@ void Clustering::lloyd_assign(void) {
         x.second.clear();
     }
 
-    for (size_t i = 0; i < db->getSize(); i++) {
+    for (int i = 0; i < db->getSize(); i++) {
         double min_dist = INFINITY ;
         int min_index = -1 ;
-        for (size_t j = 0; j < k; j++) {
+        for (int j = 0; j < k; j++) {
             double d_to_c = db->getItem(i)->distance(representative[j]);
             if (d_to_c < min_dist) {
                 min_index = j ;

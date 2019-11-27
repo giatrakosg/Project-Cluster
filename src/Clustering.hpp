@@ -23,8 +23,8 @@
 
 #define private public
 
-#define MAX_ITERATIONS 2
-#define MAX_MEAN_ITER 2
+#define MAX_ITERATIONS 5
+#define MAX_MEAN_ITER 5
 
 using namespace std ;
 
@@ -48,12 +48,12 @@ private:
     void init() ; // Does the initialization of the k centers
     void assign(); // Does the assignment of the n vectors to their clusters
     void update(); // Does the update of the k centers
+    Database *db ; // Database with points
 
     int k ; // The number of clusters k
 
     bool isCurve ; // True if our objects are curves
 
-    Database *db ; // Database with points
     int flags[3] ; // Flags used to determine which algorithms are used
     // for init , assign and update given by user
     std::map<pair<int,int> , double> dist; // Map with distances of each pair

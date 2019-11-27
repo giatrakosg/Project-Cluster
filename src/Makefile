@@ -3,8 +3,8 @@ TESTOBJS = CMDParser.o  Parser.o Database.o Item.o Vector.o test.o Curve.o ConfP
 SOURCE = CMDParser.cpp main.cpp Parser.cpp Database.cpp Item.cpp Vector.cpp test.cpp Curve.cpp ConfParser.cpp Clustering.cpp
 HEADER = CMDParser.hpp main.hpp Parser.hpp Database.hpp Item.hpp Vector.hpp Curve.hpp ConfParser.hpp Clustering.hpp
 OUT = cluster test
-CC = g++
-FLAGS = -g -c -std=c++11
+CC = g++ -O2
+FLAGS = -g -c -std=c++11 -Wall 
 
 cluster : $(OBJS)
 		$(CC) -g $(OBJS) -o cluster
