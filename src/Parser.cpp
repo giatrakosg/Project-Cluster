@@ -31,7 +31,7 @@ void Parser::parseFile(std::string &input_file) {
             std::string         cell;
 
             m_data.clear();
-            while(std::getline(lineStream, cell, ' '))
+            while(std::getline(lineStream, cell, '\t'))
             {
                 m_data.push_back(cell);
             }

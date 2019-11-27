@@ -26,9 +26,8 @@ public:
     void printItem(std::string ); // Prints the item stored with that string id
     void addItem(Item *); // Adds item to database
     Item * getItem(std::string ); // Get a pointer to the Item stored by string
-    Item * getItem(int ); // Gets the item at index 
+    Item * getItem(int ); // Gets the item at index
     int getSize(void) ; // Get size of database
-    virtual int getDimension(void) ; // Gets the dimension of the data stored (for vectors = dimension of R , for curves = number of points)
     ~Database();
 protected:
 

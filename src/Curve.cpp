@@ -49,7 +49,7 @@ Curve * Curve::random_subsequence(int l) {
     Curve *Sl = new Curve("rs");
     for (int i = 0; i < l; i++) {
         int index = dis(generator);
-        Sl->addPoint(points[index]->x,points[index]->y);
+        Sl->addPoint(this->points[index]->x,this->points[index]->y);
     }
     return Sl ;
 
@@ -73,6 +73,14 @@ double Curve::distance(Item *p) {
     }
     return DTW[n][m];
 
+}
+Item * Curve::clone(void) {
+    Curve *p = new Curve(this->getId());
+    for (size_t i = 0; i < this->getSize(); i++) {
+        Point * m = this->getPoint(i);
+        p->addPoint(m->x,m->y);
+    }
+    return p ;
 }
 // See https://nipunbatra.github.io/blog/2014/dtw.html
 // Section [19]

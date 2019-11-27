@@ -30,6 +30,14 @@ double Vector::distance(Item *q) {
     }
     return sum ;
 }
+Item * Vector::clone(void) {
+    // manhattan distance of the 2 vectors
+    Vector *p = new Vector(this->getId()) ;
+    for (size_t i = 0; i < coordinates.size(); i++) {
+        p->addPoint(coordinates[i]);
+    }
+    return p ;
+}
 std::vector<double>& Vector::getCoordinates()  {
     return coordinates ;
 }

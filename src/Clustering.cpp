@@ -41,7 +41,8 @@ void Clustering::random_init(void) {
             continue ;
         }
         used.insert(index);
-        Item *m = db->getItem(index);
+        Item *m = db->getItem(index)->clone();
+        //m->deepCopy(db->getItem(index));
         // Add the the generated object to the representative map
         representative.insert(std::pair<int,Item *> (selected,m));
         selected++;
@@ -55,6 +56,10 @@ void Clustering::random_init(void) {
 Curve * Clustering::init_dba(std::vector<Curve *> &Sn) {
     double mean_length = 0 ;
     int num_curves = Sn.size() ;
+    // Empty cluster
+    if (num_curves == 0) {
+        return NULL ;
+    }
     for (size_t i = 0; i < Sn.size(); i++) {
         mean_length += Sn[i]->getSize() / (double) num_curves ;
     }
@@ -90,6 +95,9 @@ Point * Clustering::meanPoint(std::vector<Point *> m) {
 }
 Curve * Clustering::dba(std::vector<Curve *> Sn) {
     Curve *C = init_dba(Sn);
+    if (C == NULL) {
+        return NULL ;
+    }
     int lambda = C->getSize();
     int iterations = MAX_MEAN_ITER ;
     while (iterations>0) {
@@ -123,9 +131,10 @@ Curve * Clustering::dba(std::vector<Curve *> Sn) {
         //C->clear();
         //C = C2 ;
         if (C->isEqual(C_prime)) {
-            //delete C_prime;
+            delete C_prime ;
             break ;
         }
+        delete C_prime ;
         iterations--;
     }
     return C ;
@@ -142,6 +151,9 @@ void Clustering::lloyd_assign(void) {
         double min_dist = INFINITY ;
         int min_index = -1 ;
         for (int j = 0; j < k; j++) {
+            if (representative[j] == NULL) {
+                continue ;
+            }
             double d_to_c = db->getItem(i)->distance(representative[j]);
             if (d_to_c < min_dist) {
                 min_index = j ;
@@ -182,9 +194,10 @@ void Clustering::mean_update(void){
             std::vector<Curve *> curves;
             for (size_t i = 0; i < cluster.second.size(); i++) {
                 curves.push_back(dynamic_cast<Curve *> (db->getItem(cluster.second.at(i)))) ;
-                auto nm = dba(curves);
-                representative[cluster.first] = nm ;
             }
+            auto nm = dba(curves);
+            delete representative[cluster.first] ;
+            representative[cluster.first] = nm ;
         }
     }
 }
@@ -223,10 +236,23 @@ void Clustering::printRepresentatives(void) {
     for (auto const& x : representative)
     {
         //Item * x_it = x.second;
-        std::cout << x.first  // string (key)
-                  << ':'
-                  << x.second->getId() // string's value
-                  << std::endl ;
+        std::cout << x.first << ':' ;
+        if (x.second == NULL) {
+            std::cout << "Empty cluster" << std::endl ;
+            continue ;
+        }
+        std::cout << x.second->getId() << std::endl ;
     }
 }
-Clustering::~Clustering() {}
+Clustering::~Clustering() {
+    if (flags[2] == 0) {
+        /* code */
+    }
+    if (flags[2] == 1) {
+        // We delete the represenentatives if mean update since they do not belong to the db an wont be deleted
+        // Else , since the representatives are in the dataset they will be deleted by the db
+        for(auto &p : representative) {
+            delete p.second ;
+        }
+    }
+}
