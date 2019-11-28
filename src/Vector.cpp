@@ -41,5 +41,7 @@ Item * Vector::clone(void) {
 std::vector<double>& Vector::getCoordinates()  {
     return coordinates ;
 }
-
+double Vector::getmax(void) {
+    return * std::max_element(coordinates.begin(),coordinates.end());
+}
 Vector::~Vector() {}

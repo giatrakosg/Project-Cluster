@@ -1,9 +1,9 @@
-OBJS = CMDParser.o main.o Parser.o Database.o Item.o Vector.o Curve.o ConfParser.o Clustering.o
-TESTOBJS = CMDParser.o  Parser.o Database.o Item.o Vector.o test.o Curve.o ConfParser.o Clustering.o
-SOURCE = CMDParser.cpp main.cpp Parser.cpp Database.cpp Item.cpp Vector.cpp test.cpp Curve.cpp ConfParser.cpp Clustering.cpp
-HEADER = CMDParser.hpp main.hpp Parser.hpp Database.hpp Item.hpp Vector.hpp Curve.hpp ConfParser.hpp Clustering.hpp
+OBJS = CMDParser.o main.o Parser.o Database.o Item.o Vector.o Curve.o ConfParser.o Clustering.o Hashtable.o
+TESTOBJS = CMDParser.o  Parser.o Database.o Item.o Vector.o test.o Curve.o ConfParser.o Clustering.o Hashtable.o
+SOURCE = CMDParser.cpp main.cpp Parser.cpp Database.cpp Item.cpp Vector.cpp test.cpp Curve.cpp ConfParser.cpp Clustering.cpp Hashtable.cpp
+HEADER = CMDParser.hpp main.hpp Parser.hpp Database.hpp Item.hpp Vector.hpp Curve.hpp ConfParser.hpp Clustering.hpp Hashtable.h
 OUT = cluster test
-CC = g++ 
+CC = g++
 FLAGS = -g -c -std=c++11 -Wall
 
 cluster : $(OBJS)
@@ -30,7 +30,8 @@ ConfParser.o : ConfParser.cpp
 		$(CC) $(FLAGS) ConfParser.cpp
 Clustering.o : Clustering.cpp
 		$(CC) $(FLAGS) Clustering.cpp
-
+Hashtable.o : Hashtable.cpp
+		$(CC) $(FLAGS) Hashtable.cpp
 
 
 clean:

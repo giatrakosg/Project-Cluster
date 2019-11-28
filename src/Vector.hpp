@@ -15,6 +15,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
 using namespace std ;
 
@@ -38,6 +39,7 @@ public:
     Item * clone(void);
     void addPoint(double );
     std::vector<double>& getCoordinates() ;
+    double getmax(void) ;
     ~Vector();
 protected:
 

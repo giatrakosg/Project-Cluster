@@ -153,6 +153,9 @@ void Curve::clear(void) {
 
     points.clear();
 }
+double Curve::getmax(void) {
+    return 0 ;
+}
 Curve::~Curve() {
     for (size_t i = 0; i < points.size(); i++) {
         delete points[i] ;

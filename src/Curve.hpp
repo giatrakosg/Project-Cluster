@@ -56,7 +56,7 @@ public:
     Curve * random_subsequence(int ); // We produce a random subsequence of this curve with length
     double distance(Item *q) ;
     Item * clone() ;
-
+    double getmax();
     std::vector<std::pair<int,int>> dtwBestTraversal(Curve *q); // Returns the pairs of indices of the best traversal calculated with dtw
     void clear(void); // Clear points from Curve
     ~Curve();

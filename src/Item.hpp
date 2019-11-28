@@ -22,7 +22,8 @@ public:
     std::string getId(void) ;
     virtual bool isEqual(Item &) = 0 ;// Returns if 2 items are equal
     virtual double distance(Item *) = 0 ; // Returns the distance between two Items
-    virtual Item * clone(void) = 0 ; // Deep copy of given Item pointer to this 
+    virtual Item * clone(void) = 0 ; // Deep copy of given Item pointer to this
+    virtual double getmax(void) = 0 ; // Get max point in item 
     virtual ~Item();
 protected:
     std::string id ; // Item id
