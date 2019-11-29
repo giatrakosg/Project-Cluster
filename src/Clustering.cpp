@@ -139,7 +139,73 @@ Curve * Clustering::dba(std::vector<Curve *> Sn) {
     }
     return C ;
 }
-void Clustering::kmeans_init(void) {}
+
+double Clustering::D(Item *t){
+    double min_distance = t->distance(representative[0]); //vazw ws minimum distance enos Item tin apostasi apo to prwto centroid pou 
+    for (size_t i = 1; i < representative.size(); i++){ //vrisketai sta representatives
+        double dist = t->distance(representative[i]);
+        if (dist < min_distance){
+            min_distance = dist;
+        }
+    }
+    return min_distance;
+}
+
+int Clustering::find_new_centroid(set<int> &used){
+    vector< std::pair<int,double> > partial_sum_array; //pinakas tetragwnwn merikwn a8roismatwn
+    partial_sum_array.push_back(std::pair<int,double> (-1,0.0)) ; //vazw ws prwto item sto pinaka to -1,0 giati o ari8mos -1
+    double min_distance; //den anikei sto set mas kai i apostasi 0.0 gia na arxikopoiisoume to a8roisma twn merikwn apostasewn
+    double min_dif = pow(D(db->getItem(0)),2); //vazw ws min difference ti minimum apostasi tou 1ou Item sti vasi apo to centroid tou
+    //uparxei periptwsi to Item 0 na einai centroid
+    for (size_t i = 0; i < db->getSize(); i++){ //ftiaxnei to pinaka twn tetragwnwn twn merikwn a8roismatwn
+        if (!(used.find(i) == used.end())){ //an to Item einai sta used diladi einai centroid tote de vriskei tin minimum apostasi tou
+            continue;
+        }
+        min_distance = pow(D(db->getItem(i)),2) ; //vriskw tin minimum distance enos simeiou apo to centroid tou kai tin apo8ikeuw 
+        std::pair<int,double> p = partial_sum_array[partial_sum_array.size() - 1] ; //ftiaxnw ena kainourio pair p wste na krataw ti
+        //meriki apostasi tou proigoumenou Item tou pinaka pou mou xreiazetai gia to Item pou exw
+        partial_sum_array.push_back(std::pair<int,double> (i,p.second + min_distance)) ; //pros8etw ti metriki apostasi tou proigoumenou 
+        //item me tou trexontos wste na ftia3w ti meriki apostasi tou trexontos item
+        if (min_dif > min_distance) //to  min dif einai i mikroteri metriki apostasi tou pinaka 
+            min_dif = min_distance ; //kai ti xrisimopoiw gia to binary search
+
+    } 
+    std::uniform_int_distribution<int> distribution(0,partial_sum_array[partial_sum_array.size() - 1].second) ; 
+    double x = distribution(this-> generator) ; //pairnw ena random ari8mo anamesa sto 0 kai ti megisti metriki apostasi
+    //pou einai i metriki apostasi tou item tou teleutaiou antikeimenou tou pinaka partial_sum_arrat
+    new_centroid_position = Binary_search(partial_sum_array,x,min_dif,partial_sum_array[1],partial_sum_array[partial_sum_array.size() - 1]);
+    //kanw binary search gia na vrw ti 8esi tou kainouriou item
+    return new_centroid_position ;
+}
+
+//epistrefei ti 8esi tou neou centroid sto db
+int CLustering::Binary_search(vector< std::pair<int,double> > &partial_sum_array,double x,double min_dif,int l,int r){ //to l einai to prwto kai to r einai to teleutaio stoixeio
+    if (r >= 1){
+        int mid = 1 + (r - 1) / 2;
+        if (abs(x - partial_sum_array[mid].second) <= min_dif)
+            return partial_sum_array[mid].first;
+        if (x - partial_sum_array[mid].second > min_dif)
+            return Binary_search(partial_sum_array,x,min_dif,l,mid - 1);
+        return Binary_search(partial_sum_array,x,min_dif,mid + 1,r);
+    }
+}
+
+void Clustering::kmeans_init(void) {
+    std::uniform_int_distribution<int> distribution(0,db->getSize() - 1) ; // Uniform distribution used for
+
+    int index = distribution(this -> generator);
+    int selected = 0;
+    std::set<int> used ;
+    used.insert(index) ;
+    Item *m = db->getItem(index);
+    representative.insert(std::pair<int,Item *> (selected,m));
+    selected++ ;
+    while (selected < k){
+
+    }
+
+}
+
 void Clustering::lloyd_assign(void) {
     // Clear out previous assignments
     for (auto & x : assigned)
