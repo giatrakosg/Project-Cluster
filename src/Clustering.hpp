@@ -32,7 +32,12 @@ using namespace std ;
 class Clustering {
 private:
     void random_init(); // Random selection of K items
+    
+    double D(Item *t); //vriskei tin minimum apostasi enos Item apo ta centroids 
+    int find_new_centroid(set<int> &used); 
+    int Binary_search(vector< std::pair<int,double> > &partial_sum_array,double x,double min_dif,int l,int r);
     void kmeans_init(); // K-means++ selectionof first K items
+    
     void lloyd_assign(); // Lloyd assignment
     void range_search_assign(); // Assignment by Range search
 
