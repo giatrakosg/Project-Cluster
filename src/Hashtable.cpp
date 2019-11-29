@@ -17,43 +17,17 @@ Hash::Hash(int k,float rad,int size,int d , Database *dbS)  // Constructor
 
    	create_Starting_Points();
 }
-/*
-void Hash::create_Starting_Points(){
-	int number=k*3;
-	vector <Item *> sp; //o pinakas twn starting Items
-	Item *spp; //proswrinos Itemer gia ta starting Items
-	int i,j,intw=w;
 
-	for (i=0;i<number;i++){
-		spp=new Item;
-		spp->itemId="N";
-
-		for (j=0;j<d;j++){
-            float floatPart = ((float)rand()/RAND_MAX) ;
-            float intPart = uniform_distribution(0,intw-1);
-			spp->array.push_back(intPart + floatPart); //((float)rand()/RAND_MAX) dinei enan pragmatiko ari8mo apo to 0 ws to 1
-		} //ton opoio pros8etw me ena akeraio ari8mo apo to 0 ws to w-1 gia na para3w enan ari8mo apo to 0 ws to w.
-		sp.push_back(spp);
-	}
-	for (i=0;i<k;i++){
-		int position=rand()%number; //einai o ari8mos pou sumvolizei mia apo tis "grammes" tou pinaka sp o opoios exei k*3 random starting Items
-		start_points.push_back(sp[position]);
-		sp[position]->itemId="O"; //markarw ta simeia pou 8a kratisw gia ti g etsi wste na diagra4w ta upoloipa
-	}
-	for (i=0;i<sp.size();i++){ //diagrafw ta simeia pou de 8a xrisimopoiisw gia tin h
-		if (sp[i]->itemId=="N"){
-			delete sp[i];
-		}
-	}
-}
-*/
 // Different implementation of starting Items
 void Hash::create_Starting_Points(void) { //dimiourgia starting Items
+    std::uniform_int_distribution<int> dis(0,w-1);
+    std::default_random_engine generator;
+
     for (int i = 0; i < k; i++) { //ta starting Items einai ta simeia twn opoiwn tis diastaseis tou si xrisimopoioume gia
-        Vector *sp = new Vector("sp" + i) ; //ton upologismo tou a
+        Vector *sp = new Vector("sp") ; //ton upologismo tou a
         for (int j = 0; j < d; j++) {
             float floatPart = ((float)rand()/RAND_MAX) ;
-            float intPart = uniform_distribution(0,w-1);
+            float intPart = dis(generator);
             sp->addPoint(intPart + floatPart);
         }
         start_points.push_back(sp);
@@ -68,23 +42,6 @@ void Hash::insert_Database(void){ //kanoume to hashing mesw tis g kai analoga me
 		htable[bucket_number]->push_back(x);
 	}
 }
-/*
-int Hash::h(Item *x,Item *s){
-	int i,j;
-	Item a;
-	for (i=0;i<s->array.size();i++){ //3ekinaw apo to 2o stoixeio giati to prwto einai to item tou Item
-		int temp= abs(floor(((double) (x->array[i])- (s->array[i]) )/w)); // sumvolizei tin pra3i ai=(xi-si)/w pou vrisketai stis diafaneies gia na paragoume tis diastaseis tou a
-		a.array.push_back(temp);
-	}
-	int m=getmax(a)+1;
-    //long m = pow(2,32) - 5 ;
-    unsigned int sum=0;
-	for (i=a.array.size()-1,j=0;i>=0;i--,j++){
-		sum+=(mod_Calculator(m,j,256,a.array[i]) % 256); //kanei ti pra3i (ai+m*ai+...+m^(n-1)*ai)%M
-	}
-	return sum % 256; //to M sumfwna me tis diafaneies einai 2^(32/k) opou k=4 ara 2^8=256
-}
-*/
 
 unsigned int Hash::h(Item *x,Item *s){ //ulopoiisi twn h(k) pou xrisimopoiountai apo tin g
     vector<int> a ;
@@ -118,8 +75,6 @@ unsigned int Hash::calculate_mod(unsigned int m,int power,unsigned int M,int a) 
     unsigned int number = ((((unsigned int )a) ) * (c )) % M ;
     return number ;
 }
-
-
 unsigned int Hash::g(Item *x){ //i ulopoisi tis g
 	unsigned int sum=0;
 	int i;

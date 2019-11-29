@@ -18,10 +18,11 @@
 #include "Database.hpp"
 #include "Item.hpp"
 #include "Vector.hpp"
+#include <algorithm>
+#include <random>
+#include <math.h>
 
 using namespace std;
-
-
 
 class Hash
 {
@@ -55,8 +56,6 @@ public:
   	int getmax(Item &);
 
   	unsigned int mod_Calculator(unsigned int m,unsigned int power,unsigned int M,int ai);
-
-  	static int Manhattan_Distance(Item * q,Item * x);
 };
 
 

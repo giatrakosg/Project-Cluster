@@ -6,6 +6,7 @@
 #include "../src/Parser.hpp"
 #include "../src/ConfParser.hpp"
 #include "../src/Clustering.hpp"
+#include "../src/Hashtable.h"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -163,4 +164,15 @@ TEST_CASE("DBA") {
     cluster.runClustering();
     cluster.printRepresentatives();
     delete db ;
+}
+TEST_CASE("LSH") {
+    Database db ;
+    Parser parser(&db);
+    std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
+    parser.parseFile(input_file);
+    Hash *h = new Hash(4,1.0,5,100,&db);
+    h->insert_Database();
+    for (size_t i = 0; i < h->start_points.size(); i++) {
+        std::cout << *(h->start_points[i]) << std::endl ;
+    }
 }
