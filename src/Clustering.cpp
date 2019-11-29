@@ -26,6 +26,7 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
 
     }
 }
+
 void Clustering::random_init(void) {
     // We produce k distinct integers in the [0,n) range that
     // are the selected initial centers of the clusters
