@@ -165,6 +165,17 @@ TEST_CASE("DBA") {
     cluster.printRepresentatives();
     delete db ;
 }
+TEST_CASE("MEAN_VECTOR") {
+    Database *db = new Database() ;
+    Parser parser(db);
+    std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
+    parser.parseFile(input_file);
+    Clustering cluster (db,false,5,0,0,1) ;
+    cluster.runClustering();
+    cluster.printRepresentatives();
+    delete db ;
+
+}
 TEST_CASE("LSH") {
     Database db ;
     Parser parser(&db);
@@ -172,7 +183,9 @@ TEST_CASE("LSH") {
     parser.parseFile(input_file);
     Hash *h = new Hash(4,1.0,5,100,&db);
     h->insert_Database();
+    /*
     for (size_t i = 0; i < h->start_points.size(); i++) {
         std::cout << *(h->start_points[i]) << std::endl ;
     }
+    */
 }

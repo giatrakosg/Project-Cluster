@@ -44,4 +44,12 @@ std::vector<double>& Vector::getCoordinates()  {
 double Vector::getmax(void) {
     return * std::max_element(coordinates.begin(),coordinates.end());
 }
+int Vector::getDimension(void) {
+    return coordinates.size();
+}
+void Vector::init_0(int n) {
+    for (size_t i = 0; i < n; i++) {
+        this->addPoint(0);
+    }
+}
 Vector::~Vector() {}
