@@ -174,7 +174,7 @@ int Clustering::find_new_centroid(set<int> &used){
     std::uniform_int_distribution<int> distribution(0,partial_sum_array[partial_sum_array.size() - 1].second) ;
     double x = distribution(this-> generator) ; //pairnw ena random ari8mo anamesa sto 0 kai ti megisti metriki apostasi
     //pou einai i metriki apostasi tou item tou teleutaiou antikeimenou tou pinaka partial_sum_arrat
-    int new_centroid_position = Binary_search(partial_sum_array,x,min_dif,partial_sum_array[1],partial_sum_array[partial_sum_array.size() - 1]);
+    int new_centroid_position = Binary_search(partial_sum_array,x,min_dif,partial_sum_array[1].second,partial_sum_array[partial_sum_array.size() - 1].second);
     //kanw binary search gia na vrw ti 8esi tou kainouriou item
     return new_centroid_position ;
 }
@@ -191,10 +191,11 @@ int Clustering::Binary_search(vector< std::pair<int,double> > &partial_sum_array
     }
 }
 
+
 void Clustering::kmeans_init(void) {
     std::uniform_int_distribution<int> distribution(0,db->getSize() - 1) ; // Uniform distribution used for
 
-    int index = distribution(this -> generator);
+    int index = distribution(this -> generator); //to index einai i 8esi pou exei to item sti vasi
     int selected = 0;
     std::set<int> used ;
     used.insert(index) ;
@@ -202,7 +203,11 @@ void Clustering::kmeans_init(void) {
     representative.insert(std::pair<int,Item *> (selected,m));
     selected++ ;
     while (selected < k){
-
+        index = find_new_centroid(used) ;
+        used.insert(index) ;
+        m = db->getItem(index) ;
+        representative.insert(std::pair<int,Item *> (selected,m)) ;
+        selected++ ;
     }
 
 }
