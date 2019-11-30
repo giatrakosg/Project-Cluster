@@ -140,7 +140,19 @@ Curve * Clustering::dba(std::vector<Curve *> Sn) {
     }
     return C ;
 }
-
+Vector * Clustering::meanVector(std::vector<Vector *> vectors) {
+        if (vectors.empty()) {
+            return NULL ;
+        }
+        Vector *mean = new Vector("m");
+        int d = vectors[0]->getDimension();
+        mean->init_0(d);
+        for (size_t i = 0; i < vectors.size(); i++) {
+            *mean += *vectors[i];
+        }
+        *mean /= vectors.size();
+        return mean ;
+}
 double Clustering::D(Item *t){
     double min_distance = t->distance(representative[0]); //vazw ws minimum distance enos Item tin apostasi apo to prwto centroid pou
     for (size_t i = 1; i < representative.size(); i++){ //vrisketai sta representatives
@@ -271,6 +283,17 @@ void Clustering::mean_update(void){
             delete representative[cluster.first] ;
             representative[cluster.first] = nm ;
         }
+    } else {
+        for (auto &cluster : assigned) {
+            std::vector<Vector *> vectors;
+            for (size_t i = 0; i < cluster.second.size(); i++) {
+                vectors.push_back(dynamic_cast<Vector *> (db->getItem(cluster.second.at(i)))) ;
+            }
+            auto nm = meanVector(vectors);
+            delete representative[cluster.first] ;
+            representative[cluster.first] = nm ;
+        }
+
     }
 }
 

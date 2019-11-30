@@ -40,6 +40,21 @@ public:
     void addPoint(double );
     std::vector<double>& getCoordinates() ;
     double getmax(void) ;
+    Vector & operator += (Vector &other)  {
+        auto m = other.getCoordinates();
+        for (size_t i = 0; i < m.size(); i++) {
+            coordinates[i] += m[i];
+        }
+        return *this ;
+    }
+    Vector & operator /= (double x) {
+        for (size_t i = 0; i < coordinates.size(); i++) {
+            coordinates[i] /= x ;
+        }
+        return *this ;
+    }
+    int getDimension();
+    void init_0(int n);// Initializes the n positions of the vector to 0
     ~Vector();
 protected:
 
