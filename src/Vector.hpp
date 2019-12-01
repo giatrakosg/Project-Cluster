@@ -53,6 +53,7 @@ public:
         }
         return *this ;
     }
+    void print(std::ostream &);
     int getDimension();
     void init_0(int n);// Initializes the n positions of the vector to 0
     ~Vector();

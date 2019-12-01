@@ -41,6 +41,14 @@ Item * Vector::clone(void) {
 std::vector<double>& Vector::getCoordinates()  {
     return coordinates ;
 }
+void Vector::print(std::ostream &out) {
+    out << this->getId() << ":";
+    out << "[" ;
+    for (size_t i = 0; i < coordinates.size(); i++) {
+        out << coordinates[i] << "," ;
+    }
+    out << "]\n" ;
+}
 double Vector::getmax(void) {
     return * std::max_element(coordinates.begin(),coordinates.end());
 }

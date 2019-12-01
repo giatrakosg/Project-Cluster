@@ -156,6 +156,16 @@ void Curve::clear(void) {
 double Curve::getmax(void) {
     return 0 ;
 }
+void Curve::print(std::ostream &out) {
+    out << this->getId() << ":";
+    out << "[" ;
+    for (size_t i = 0; i < points.size(); i++) {
+        out << "(" << points[i]->x << "," << points[i]->y << ")"  << "," ;
+    }
+    out << "]\n" ;
+
+}
+
 Curve::~Curve() {
     for (size_t i = 0; i < points.size(); i++) {
         delete points[i] ;

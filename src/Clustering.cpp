@@ -336,7 +336,7 @@ void Clustering::printRepresentatives(void) {
             std::cout << "Empty cluster" << std::endl ;
             continue ;
         }
-        std::cout << x.second->getId() << std::endl ;
+        x.second->print(std::cout);
     }
 }
 Clustering::~Clustering() {

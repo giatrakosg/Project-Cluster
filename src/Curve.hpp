@@ -59,6 +59,8 @@ public:
     double getmax();
     std::vector<std::pair<int,int>> dtwBestTraversal(Curve *q); // Returns the pairs of indices of the best traversal calculated with dtw
     void clear(void); // Clear points from Curve
+    void print(std::ostream &out);
+
     ~Curve();
 protected:
 
