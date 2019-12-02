@@ -179,10 +179,24 @@ TEST_CASE("MEAN_VECTOR") {
 TEST_CASE("LSH") {
     Database db ;
     Parser parser(&db);
-    std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
+    std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x500.csv");
     parser.parseFile(input_file);
     Hash *h = new Hash(4,1.0,5,100,&db);
     h->insert_Database();
+
+    Database dbq ;
+    Parser parserq(&dbq);
+    std::string query_file = ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
+    parserq.parseFile(query_file);
+
+
+    Item *v = dbq.getItem("item533");
+    auto r = h->range_search(v,500,1.2);
+
+    for (size_t i = 0; i < r.size(); i++) {
+        std::cout << r[i].first << std::endl ;
+    }
+
     /*
     for (size_t i = 0; i < h->start_points.size(); i++) {
         std::cout << *(h->start_points[i]) << std::endl ;
