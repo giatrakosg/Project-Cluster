@@ -28,14 +28,14 @@ TEST_CASE( "storing vectors" ) {
     REQUIRE(db.getItem("p1")->isEqual(*v1));
 }
 TEST_CASE ("parsing vector data" ) {
-    Database db ;
-    Parser parser(&db);
+    Database *db = new Database();
+    Parser parser(db);
     std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
     parser.parseFile(input_file);
     std::vector<double> p1 {1.0,2.3,5.9} ;
     Vector v1 ("p1",p1);
-    REQUIRE(db.getSize() == 456) ;
-     ;
+    REQUIRE(db->getSize() == 456) ;
+    delete db;
     //REQUIRE(db.getItem("p1")->isEqual(v1));
 
 }
@@ -43,18 +43,19 @@ TEST_CASE ("parsing curve data") {
     /*
     6	8	(-6.2582100000000001, 53.347799999999999) (-6.4272499999999999, 53.290799999999997) (-6.4272499999999999, 53.290799999999997) (-6.4272900000000002, 53.290799999999997) (-6.4272900000000002, 53.290799999999997) (-6.4271799999999999, 53.291400000000003) (-6.4265499999999998, 53.290100000000002) (-6.4272099999999996, 53.2911)
     */
-    Database db ;
-    Parser parser(&db);
+    Database *db = new Database();
+    Parser parser(db);
     std::string input_file ("../data/curves_clustering/input_projection6.csv");
     parser.parseFile(input_file);
     std::vector<std::pair<double,double>> points ;
 
     Curve *c1 ;
-    c1 = dynamic_cast<Curve *>(db.getItem("4474"));
+    c1 = dynamic_cast<Curve *>(db->getItem("4474"));
 
-    REQUIRE(db.getSize() == 1600) ;
+    REQUIRE(db->getSize() == 1600) ;
     REQUIRE(c1 != NULL);
-    REQUIRE(db.getItem("4474")->getDimension() == 2);
+    REQUIRE(db->getItem("4474")->getDimension() == 2);
+    delete db ;
     //REQUIRE(db.getItem("6")->isEqual(c1));
 }
 TEST_CASE ("parsing config file") {
@@ -180,29 +181,21 @@ TEST_CASE("MEAN_VECTOR") {
 
 }
 TEST_CASE("LSH") {
-    Database db ;
-    Parser parser(&db);
+    Database *db = new Database();
+    Parser parser(db);
     std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x500.csv");
     parser.parseFile(input_file);
-    Hash *h = new Hash(4,1.0,5,100,&db);
+    Hash *h = new Hash(4,1.0,5,100,db);
     h->insert_Database();
 
-    Database dbq ;
-    Parser parserq(&dbq);
+    Database *dbq = new Database();
+    Parser parserq(dbq);
     std::string query_file = ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
     parserq.parseFile(query_file);
 
-
-    Item *v = dbq.getItem("item533");
+    Item *v = dbq->getItem("item533");
     auto r = h->range_search(v,500,1.2);
+    delete db ;
+    delete dbq ;
 
-    for (size_t i = 0; i < r.size(); i++) {
-        std::cout << r[i].first << std::endl ;
-    }
-
-    /*
-    for (size_t i = 0; i < h->start_points.size(); i++) {
-        std::cout << *(h->start_points[i]) << std::endl ;
-    }
-    */
 }

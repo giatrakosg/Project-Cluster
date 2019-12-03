@@ -58,6 +58,7 @@ private:
 
     int nearest_cluster(int cluster);//epistrefei to kontinotero cluster apo ena simeio
     double Silhouette_point(int cluster,int point,int nearest_cluster); //ektelei to s(i) = b(i) - a(i) / max{a(i),b(i)}
+    void init_c_rs(void); // Init the c_rs variable after first init
 
     Hash *ht ;
     int k ; // The number of clusters k
@@ -72,7 +73,8 @@ private:
     // representative center
     std::map<int,int> medoid_repr ; // Used when medoid representation
     std::map<int, std::vector<int>> assigned; // Map that matches each cluster to its assigned points
-
+    double c_rs ; // The c variable for range search (initialized) after init
+    double r_rs ; // The r variable for range_search
     std::default_random_engine generator;
 
 public:

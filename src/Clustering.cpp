@@ -250,7 +250,9 @@ void Clustering::lloyd_assign(void) {
         assigned[min_index].push_back(i) ;
     }
 }
-void Clustering::range_search_assign(void) {}
+void Clustering::range_search_assign(void) {
+
+}
 void Clustering::pam_update(void) {
     // We iterate through each cluster and update the medoid
     for (auto & x : assigned)
@@ -299,13 +301,30 @@ void Clustering::mean_update(void){
 
     }
 }
+void Clustering::init_c_rs(void) {
+    // We init the c_rs variable to min(dist between centers)/2
+    double min = INFINITY;
+    for (int i = 0; i < k; i++) {
+        for (int j = 0; j < k; j++) {
+            if (i == j) {
+                continue ;
+            }
+            double d = representative[i]->distance(representative[j]);
+            if (d < min ) {
+                min = d;
+            }
+        }
+    }
+    c_rs = min / 2.0 ;
 
+}
 void Clustering::init(void) {
     if (flags[0] == 0) {
         random_init();
     } else if (flags[0] == 1) {
         kmeans_init();
     }
+    init_c_rs();
 }
 void Clustering::assign(void) {
     if (flags[1] == 0) {
