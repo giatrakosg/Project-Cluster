@@ -107,13 +107,15 @@ TEST_CASE ("Item distance") {
 
 }
 TEST_CASE("Clustering initialization") {
-    Database db ;
-    Parser parser(&db);
+    Database *db = new Database();
+
+    Parser parser(db);
     std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
     parser.parseFile(input_file);
-    Clustering cluster (&db,false,5,0,0,0) ;
+    Clustering cluster (db,false,5,0,0,0) ;
     cluster.runClustering();
     cluster.printRepresentatives();
+    delete db ;
 }
 TEST_CASE("DTW_BEST_TRAVERSAL") {
     Curve c1 ("c1");
