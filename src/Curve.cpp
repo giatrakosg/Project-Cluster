@@ -166,7 +166,7 @@ void Curve::print(std::ostream &out) {
 
 }
 int Curve::getDimension(void) {
-    return -1 ;
+    return this->getSize() ;
 }
 
 Curve::~Curve() {

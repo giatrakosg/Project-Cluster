@@ -102,7 +102,12 @@ void Parser::parseFile(std::string &input_file) {
                 temp.push_back(p);
             }
             Curve *c = new Curve(id);
-            for (size_t i = 0; i < temp.size(); i++) {
+            c->addPoint(temp[0].first,temp[0].second);
+            for (size_t i = 1; i < temp.size(); i++) {
+                // We remove duplicate points
+                if (temp[i-1] == temp[i]) {
+                    continue ;
+                }
                 c->addPoint(temp[i].first,temp[i].second);
             }
             db->addItem(c);

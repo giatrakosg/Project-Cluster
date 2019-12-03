@@ -54,6 +54,7 @@ TEST_CASE ("parsing curve data") {
 
     REQUIRE(db.getSize() == 1600) ;
     REQUIRE(c1 != NULL);
+    REQUIRE(db.getItem("4474")->getDimension() == 2);
     //REQUIRE(db.getItem("6")->isEqual(c1));
 }
 TEST_CASE ("parsing config file") {
