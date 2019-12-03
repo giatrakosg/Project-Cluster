@@ -25,7 +25,7 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
         std::cout << "done" << std::endl ;
 
     }
-    ht  = new Hash(5,1,(db->size()/8),db->dimensions(),db);
+    ht  = new Hash(5,1,(db->getSize()/8),db->getDimensions(),db);
 }
 
 void Clustering::random_init(void) {
@@ -394,11 +394,11 @@ double Clustering::Silhouette_point(int cluster,int point,int nearest_cluster){
     {
         if (i == point)
             continue;
-        ai += dist[pair<int,int>(point,i)]; 
+        ai += dist[pair<int,int>(point,i)];
     }
     for (unsigned i = 0; i < nearest_cluster_points.size(); ++i)
     {
-        bi += dist[pair<int,int>(point,i)]; 
+        bi += dist[pair<int,int>(point,i)];
     }
     ai = ai / cluster_points.size();
     bi = bi / nearest_cluster_points.size();
