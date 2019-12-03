@@ -55,6 +55,10 @@ private:
     void assign(); // Does the assignment of the n vectors to their clusters
     void update(); // Does the update of the k centers
     Database *db ; // Database with points
+    
+    int nearest_cluster(int cluster);//epistrefei to kontinotero cluster apo ena simeio
+    double Silhouette_point(int cluster,int point,int nearest_cluster); //ektelei to s(i) = b(i) - a(i) / max{a(i),b(i)}
+    
     Hash *ht ;
     int k ; // The number of clusters k
 
@@ -75,6 +79,7 @@ public:
     Clustering(Database *,bool ,int ,int ,int ,int ); // Database with data points
     // Followed by k and sequence of [0,1,0] etc that selects the init , assign and update
     // algorithms respectively
+    double Silhouette();//Silhouette evaluation
     void runClustering(); // Function called by main
     void printRepresentatives(void) ;
     ~Clustering();
