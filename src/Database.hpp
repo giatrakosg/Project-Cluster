@@ -28,6 +28,7 @@ public:
     Item * getItem(std::string ); // Get a pointer to the Item stored by string
     Item * getItem(int ); // Gets the item at index
     int getSize(void) ; // Get size of database
+    virtual int getDimensions() = 0;
     ~Database();
 protected:
 
