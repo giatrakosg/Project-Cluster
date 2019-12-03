@@ -36,7 +36,7 @@ private:
 
     double D(Item *t); //vriskei tin minimum apostasi enos Item apo ta centroids
     int find_new_centroid(set<int> &used);
-    int Binary_search(vector< std::pair<int,double> > &partial_sum_array,double x,double min_dif,int l,int r);
+    int Binary_search(vector< std::pair<int,double> > &partial_sum_array,double x,int l,int r);
     void kmeans_init(); // K-means++ selectionof first K items
 
     void lloyd_assign(); // Lloyd assignment
@@ -55,10 +55,10 @@ private:
     void assign(); // Does the assignment of the n vectors to their clusters
     void update(); // Does the update of the k centers
     Database *db ; // Database with points
-    
+
     int nearest_cluster(int cluster);//epistrefei to kontinotero cluster apo ena simeio
     double Silhouette_point(int cluster,int point,int nearest_cluster); //ektelei to s(i) = b(i) - a(i) / max{a(i),b(i)}
-    
+
     Hash *ht ;
     int k ; // The number of clusters k
 
