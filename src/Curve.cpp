@@ -76,7 +76,7 @@ double Curve::distance(Item *p) {
 }
 Item * Curve::clone(void) {
     Curve *p = new Curve(this->getId());
-    for (size_t i = 0; i < this->getSize(); i++) {
+    for (int i = 0; i < this->getSize(); i++) {
         Point * m = this->getPoint(i);
         p->addPoint(m->x,m->y);
     }

@@ -15,6 +15,8 @@
 #include <random>
 #include <set>
 #include <algorithm>
+#include <tuple>
+#include <functional>
 
 #include "Database.hpp"
 #include "Item.hpp"
@@ -59,6 +61,9 @@ private:
     int nearest_cluster(int cluster);//epistrefei to kontinotero cluster apo ena simeio
     double Silhouette_point(int cluster,int point,int nearest_cluster); //ektelei to s(i) = b(i) - a(i) / max{a(i),b(i)}
     void init_c_rs(void); // Init the c_rs variable after first init
+
+    std::pair<double,int> closest_rep(Item *);
+    std::pair<double,int> closest_rep(int);
 
     Hash *ht ;
     int k ; // The number of clusters k

@@ -199,3 +199,14 @@ TEST_CASE("LSH") {
     delete dbq ;
 
 }
+TEST_CASE("REV_ASSN") {
+    Database *db = new Database() ;
+    Parser parser(db);
+    std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
+    parser.parseFile(input_file);
+    Clustering cluster (db,false,5,0,1,0) ;
+    cluster.runClustering();
+    cluster.printRepresentatives();
+    delete db ;
+
+}

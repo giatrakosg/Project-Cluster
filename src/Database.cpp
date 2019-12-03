@@ -27,6 +27,14 @@ int Database::getSize(void) {
 int Database::getDimensions(void) {
     return items[0]->getDimension();
 }
+int Database::getIndex(Item *q){
+    for (int i = 0; i < this->getSize(); i++) {
+        if (items[i]->getId() == q->getId()) {
+            return i ;
+        }
+    }
+    return -1 ;
+}
 Database::~Database() {
     for (size_t i = 0; i < items.size(); i++) {
         delete items[i] ;

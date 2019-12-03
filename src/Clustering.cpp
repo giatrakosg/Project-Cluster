@@ -164,6 +164,31 @@ double Clustering::D(Item *t){
     }
     return min_distance;
 }
+std::pair<double,int> Clustering::closest_rep(Item *t) {
+    double min_distance = INFINITY ;
+    int min_index = -1 ;
+    for (size_t i = 0; i < representative.size(); i++) {
+        double dist = t->distance(representative[i]);
+        if (dist < min_distance) {
+            min_distance = dist ;
+            min_index = i ;
+        }
+    }
+    return std::pair<double,int>(min_distance,min_index);
+}
+std::pair<double,int> Clustering::closest_rep(int qi) {
+    double min_distance = INFINITY ;
+    int min_index = -1 ;
+    Item *t = db->getItem(qi);
+    for (size_t i = 0; i < representative.size(); i++) {
+        double dist = t->distance(representative[i]);
+        if (dist < min_distance) {
+            min_distance = dist ;
+            min_index = i ;
+        }
+    }
+    return std::pair<double,int>(min_distance,min_index);
+}
 
 int Clustering::find_new_centroid(set<int> &used){
     vector< std::pair<int,double> > partial_sum_array; //pinakas tetragwnwn merikwn a8roismatwn
@@ -251,6 +276,42 @@ void Clustering::lloyd_assign(void) {
     }
 }
 void Clustering::range_search_assign(void) {
+    // Tuple (db index,is assigned,cluster,dist)
+    std::vector<std::tuple<bool,int,double>> cassn ;
+    for (int i = 0; i < db->getSize(); i++) {
+        auto t = std::make_tuple(false,-1,-1);
+        cassn.push_back(t);
+    }
+    // We cycle through each representative and call range_search
+    for (auto &r : representative) {
+        auto ball = ht->range_search(r.second,c_rs,r_rs);
+        // For each item the range search returns we update the entry on the cassn vector
+        for (auto &bp : ball) {
+            int index = db->getIndex(bp.second);
+            if (std::get<0>(cassn[index]) == false) {
+                cassn[index] = std::make_tuple(true,r.first,bp.first);
+            } else {
+                if (std::get<2>(cassn[index]) > bp.first) {
+                    cassn[index] = std::make_tuple(true,r.first,bp.first);
+                } else {
+                    continue ;
+                }
+            }
+        }
+    }
+    for (size_t i = 0; i < cassn.size(); i++) {
+        if (std::get<0>(cassn[i]) == false) {
+            auto closest = closest_rep(i);
+            cassn[i] = std::make_tuple(true,closest.second,closest.first);
+        }
+    }
+    for(auto &assn: assigned) {
+        assn.second.clear();
+    }
+    for (size_t i = 0; i < cassn.size(); i++) {
+        int cluster = std::get<1>(cassn[i]) ;
+        assigned[cluster].push_back(i);
+    }
 
 }
 void Clustering::pam_update(void) {
@@ -353,12 +414,14 @@ void Clustering::printRepresentatives(void) {
     for (auto const& x : representative)
     {
         //Item * x_it = x.second;
-        std::cout << x.first << ':' ;
+        std::cout << "cluster=" << x.first << " " ;
         if (x.second == NULL) {
             std::cout << "Empty cluster" << std::endl ;
             continue ;
         }
-        x.second->print(std::cout);
+        std::cout << "representative id=" << x.second->getId() << " " ;
+        int na = assigned[x.first].size();
+        std::cout << "number of points in cluster =" << na << std::endl ;
     }
 }
 Clustering::~Clustering() {

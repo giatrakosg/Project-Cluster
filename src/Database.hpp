@@ -29,6 +29,7 @@ public:
     Item * getItem(int ); // Gets the item at index
     int getSize(void) ; // Get size of database
     int getDimensions() ;
+    int getIndex(Item *); //Returns index of item in db 
     ~Database();
 protected:
 

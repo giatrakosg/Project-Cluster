@@ -56,7 +56,7 @@ int Vector::getDimension(void) {
     return coordinates.size();
 }
 void Vector::init_0(int n) {
-    for (size_t i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         this->addPoint(0);
     }
 }
