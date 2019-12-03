@@ -25,6 +25,7 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
         std::cout << "done" << std::endl ;
 
     }
+    ht  = new Hash(5,1,(db->size()/8),db->dimensions(),db);
 }
 
 void Clustering::random_init(void) {

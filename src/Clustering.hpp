@@ -20,6 +20,7 @@
 #include "Item.hpp"
 #include "Curve.hpp"
 #include "Vector.hpp"
+#include "Hashtable.h"
 
 #define private public
 
@@ -54,7 +55,7 @@ private:
     void assign(); // Does the assignment of the n vectors to their clusters
     void update(); // Does the update of the k centers
     Database *db ; // Database with points
-
+    Hash *ht ;
     int k ; // The number of clusters k
 
     bool isCurve ; // True if our objects are curves

@@ -25,6 +25,7 @@ public:
     virtual Item * clone(void) = 0 ; // Deep copy of given Item pointer to this
     virtual double getmax(void) = 0 ; // Get max point in item
     virtual void print(std::ostream &) = 0;
+    virtual int getDimension(void) = 0 ;
     virtual ~Item();
 protected:
     std::string id ; // Item id

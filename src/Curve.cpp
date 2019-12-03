@@ -165,6 +165,9 @@ void Curve::print(std::ostream &out) {
     out << "]\n" ;
 
 }
+int Curve::getDimension(void) {
+    return -1 ;
+}
 
 Curve::~Curve() {
     for (size_t i = 0; i < points.size(); i++) {
