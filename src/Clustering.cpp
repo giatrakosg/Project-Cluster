@@ -487,3 +487,22 @@ double Clustering::Silhouette_point(int cluster,int point,int nearest_cluster){
     double max = ai > bi ? ai : bi;
     return (bi - ai)/max;
 }
+
+double Clustering::Silhouette(){
+    double total_si = 0; //8a krataw edw tin a3iologisi tou si pou einai o ari8mos pou 8a epistrefei i silhouette
+    int cluster,n_cluster ; //o ari8mos tou cluster pou vrisketai to item, to kontinotero cluster sto item, kai to item to idio
+    for (int j = 0; j < db->getSize(); j++){ //pairnw ta index olwn twn item tis vasis
+        for (auto & x : assigned){ //mpainw sto assigned gia na vrw se poio cluster anoikei to item
+        std::vector<int> &items = x.second ; //vazw stin items ton vector me ta index twn items tou cluster
+            for (size_t i = 0; i < items.size(); i++) { //diasxizw twn vector me ta items
+                if (items[i] == j){ //an to item[i] to opoio einai to index enos ari8mou einai to idio me to j pou einai to item 
+                    cluster = x.first ; //pou exoume twra einai idia simainei oti to item auto vrisketai se auto to cluster
+                }
+            }
+        }
+        n_cluster = nearest_cluster(cluster);
+        total_si += Silhouette_point(cluster,j,n_cluster);
+    }
+    total_si = total_si / (db->getSize()) ;
+    return total_si ;
+}
