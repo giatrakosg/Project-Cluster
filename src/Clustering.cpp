@@ -442,11 +442,14 @@ void Clustering::update(void) {
     }
 }
 void Clustering::runClustering(void) {
+    clock_t begin = clock();
     init();
     for (size_t i = 0; i < MAX_ITERATIONS; i++) {
         assign();
         update();
     }
+    clock_t end = clock();
+    elapsed_secs = double(end -begin) / CLOCKS_PER_SEC ;
 
 
 }
@@ -545,4 +548,25 @@ double Clustering::Silhouette(){
     }
     total_si = total_si / (db->getSize()) ;
     return total_si ;
+}
+void Clustering::printResults(std::ostream &out) {
+    if (!isCurve) {
+        out << "Algorithm: I" << flags[0] << "A" << flags[1] << "U" << flags[2] << std::endl ;
+        for (int i = 0; i < k; i++) {
+            int cluster_size = assigned[i].size();
+            out << "CLUSTER-" << i + 1<< "{size: " << cluster_size << "," ;
+            // Centroid
+            if (flags[2] == 0) {
+                Item *centroid = db->getItem(medoid_repr[i]) ;
+                out << "centroid :" << centroid->getId() << "}" ;
+            } else {
+                Vector *centroid = dynamic_cast<Vector *>(representative[i]);
+                out << *centroid ;
+            }
+            out << std::endl ;
+        }
+        out << "clustering_time :" << elapsed_secs << std::endl ;
+        out << "Silhouette :" << "TODO" << std::endl ;
+
+    }
 }

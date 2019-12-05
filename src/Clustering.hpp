@@ -17,12 +17,15 @@
 #include <algorithm>
 #include <tuple>
 #include <functional>
+#include <ctime>
+#include <iostream>
 
 #include "Database.hpp"
 #include "Item.hpp"
 #include "Curve.hpp"
 #include "Vector.hpp"
 #include "Hashtable.h"
+
 
 #define private public
 
@@ -84,6 +87,7 @@ private:
 
     void toVectors(void); // Turn the db consisting of curves to vectors to run lsh
     Database *dbvc ; // Database of vectors from curves
+    double elapsed_secs ;
 public:
     Clustering(Database *,bool ,int ,int ,int ,int ); // Database with data points
     // Followed by k and sequence of [0,1,0] etc that selects the init , assign and update
@@ -91,6 +95,7 @@ public:
     double Silhouette();//Silhouette evaluation
     void runClustering(); // Function called by main
     void printRepresentatives(void) ;
+    void printResults(std::ostream &); // print results to ostream
     ~Clustering();
 protected:
 

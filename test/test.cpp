@@ -7,6 +7,8 @@
 #include "../src/ConfParser.hpp"
 #include "../src/Clustering.hpp"
 #include "../src/Hashtable.h"
+#include <fstream>
+
 #include <vector>
 #include <iostream>
 #include <string>
@@ -228,6 +230,19 @@ TEST_CASE("REV_ASSN") {
     Clustering cluster (db,false,5,0,1,0) ;
     cluster.runClustering();
     cluster.printRepresentatives();
+    delete db ;
+
+}
+TEST_CASE("PRINT_RESULTS") {
+    std::ofstream file ;
+    file.open("out");
+    Database *db = new Database() ;
+    Parser parser(db);
+    std::string input_file ("../data/Ex2_Datasets/DataVectors_5_500x100.csv");
+    parser.parseFile(input_file);
+    Clustering cluster (db,false,5,0,0,0) ;
+    cluster.runClustering();
+    cluster.printResults(std::cout);
     delete db ;
 
 }
