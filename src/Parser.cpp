@@ -9,7 +9,7 @@
 #include "Parser.hpp"
 
 Parser::Parser(Database *db) : db(db) {}
-void Parser::parseFile(std::string &input_file) {
+bool Parser::parseFile(std::string &input_file) {
     std::ifstream file(input_file);
     //std::istringstream str(file);
 
@@ -61,6 +61,7 @@ void Parser::parseFile(std::string &input_file) {
 
             //std::cout << std::endl ;
         }
+        return false ;
     } else if (flag == "curves") {
         std::cout << "Parsing curves file " << std::endl ;
         while (!file.eof()) {
@@ -132,6 +133,7 @@ void Parser::parseFile(std::string &input_file) {
 
             //std::cout << std::endl ;
         }
+        return true ;
     } else {
         std::cout << "File not supported " << flag << std::endl ;
 

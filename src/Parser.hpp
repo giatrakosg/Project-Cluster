@@ -24,7 +24,7 @@ class Parser {
 private:
 public:
     Parser(Database *);
-    void parseFile(std::string &) ; // Parses the given file
+    bool parseFile(std::string &) ; // Parses the given file
     ~Parser();
 protected:
     Database *db ; // Database class that the data is stored to
