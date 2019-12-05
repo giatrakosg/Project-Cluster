@@ -172,7 +172,7 @@ TEST_CASE("DBA") {
 TEST_CASE("LSH_CURVES") {
     Database *db = new Database() ;
     Parser parser(db);
-    std::string input_file ("../data/curves_clustering/input_projection6_small.csv");
+    std::string input_file ("../data/curves_clustering/input_projection6.csv");
     parser.parseFile(input_file);
     Clustering cluster (db,true,5,0,1,0) ;
     std::vector<Curve *> curves;
