@@ -35,4 +35,4 @@ Hashtable.o : Hashtable.cpp
 
 
 clean:
-		rm -f $(OBJS) $(OUT) out
+		rm -f $(OBJS) $(TESTOBJS) $(OUT) out

@@ -48,7 +48,7 @@ public:
   	void insert_Database(void);
 
   	std::pair<int,Item *> search_query_neighbour(Item *,int );
-	std::vector<std::pair<double,Item *>> range_search(Item *,int ,double );
+	std::vector<std::pair<double,Item *>> range_search(Item *,double ,double );
   	unsigned int g(Item *);
 
   	unsigned int h(Item *,Item *);

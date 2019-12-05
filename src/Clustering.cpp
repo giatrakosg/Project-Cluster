@@ -358,6 +358,11 @@ void Clustering::pam_update(void) {
                 min_index = index1 ;
             }
         }
+        // Empty cluster
+        if (items.size() == 0) {
+            representative[x.first] = NULL;
+            continue ;
+        }
         representative[x.first] = db->getItem(min_index);
         medoid_repr[x.first] = min_index ;
     }
@@ -366,16 +371,10 @@ void Clustering::pam_update(void) {
 // We convert the curves to vectors for the lsh
 void Clustering::toVectors(void) {
     dbvc = new Database();
-    int max_d = -1 ;
-    for (int i = 0; i < db->getSize(); i++) {
-        int d = db->getItem(i)->getDimension();
-        if (d > max_d) {
-            max_d = d;
-        }
-    }
+    int d = db->getDimensions();
     for (int i = 0; i < db->getSize(); i++) {
         Curve * curve = dynamic_cast<Curve *>(db->getItem(i));
-        Vector * vector = curve->toVector(max_d);
+        Vector * vector = curve->toVector(2*d);
         dbvc->addItem(vector);
     }
 }

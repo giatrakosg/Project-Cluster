@@ -215,7 +215,7 @@ TEST_CASE("LSH") {
     parserq.parseFile(query_file);
 
     Item *v = dbq->getItem("item533");
-    auto r = h->range_search(v,500,1.2);
+    auto r = h->range_search(v,500.0,1.2);
     delete db ;
     delete dbq ;
 

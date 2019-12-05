@@ -119,7 +119,7 @@ std::pair<int,Item *> Hash::search_query_neighbour(Item *q,int maxR){ //pairnei 
     return ret ;
 }
 
-std::vector<std::pair<double,Item *>> Hash::range_search(Item *q,int c,double r) {
+std::vector<std::pair<double,Item *>> Hash::range_search(Item *q,double c,double r) {
     std::vector<std::pair<double,Item *>> ret ;
     int bucket_number = g(q) ;
     // We access  the bucket of the q Item and iterate through each Item

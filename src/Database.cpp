@@ -25,7 +25,13 @@ int Database::getSize(void) {
     return items.size();
 }
 int Database::getDimensions(void) {
-    return items[0]->getDimension();
+    int max = -1 ;
+    for (size_t i = 0; i < items.size(); i++) {
+        if (items[i]->getDimension() > max) {
+            max = items[i]->getDimension() ;
+        }
+    }
+    return max;
 }
 int Database::getIndex(Item *q){
     for (int i = 0; i < this->getSize(); i++) {
