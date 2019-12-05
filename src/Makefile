@@ -7,13 +7,13 @@ CC = g++
 FLAGS = -g -c -std=c++11 -Wall
 
 cluster : $(OBJS)
-		$(CC) -g $(OBJS) -o cluster
+		$(CC) -g $(OBJS) -lpthread -o cluster
 test : $(TESTOBJS)
 		$(CC) -g $(TESTOBJS) -o ../test/test
 test.o : ../test/test.cpp
 		$(CC) $(FLAGS) ../test/test.cpp
 main.o: main.cpp
-		$(CC) $(FLAGS) main.cpp
+		$(CC) $(FLAGS) -lpthread main.cpp
 CMDParser.o: CMDParser.cpp
 		$(CC) $(FLAGS) CMDParser.cpp
 Parser.o : Parser.cpp
