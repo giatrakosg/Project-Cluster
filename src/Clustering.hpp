@@ -82,7 +82,7 @@ private:
     double r_rs ; // The r variable for range_search
     std::default_random_engine generator;
 
-    Database * toVectors(void); // Turn the db consisting of curves to vectors to run lsh
+    void toVectors(void); // Turn the db consisting of curves to vectors to run lsh
     Database *dbvc ; // Database of vectors from curves
 public:
     Clustering(Database *,bool ,int ,int ,int ,int ); // Database with data points

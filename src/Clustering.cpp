@@ -25,12 +25,20 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
         std::cout << "done" << std::endl ;
 
     }
-    if (flags[2] == 1) {
+    if (flags[1] == 1) {
+        std::cout << "initializing hashtable..." ;
+        r_rs = 1.2 ;
         if (isCurve) {
-            dbvc = toVectors();
-            ht  = new Hash(5,1,(dbvc->getSize()/8),dbvc->getDimensions(),dbvc);
+            toVectors();
+            ht  = new Hash(4,1,(dbvc->getSize()/16),dbvc->getDimensions(),dbvc);
+            ht->insert_Database();
+            std::cout << "done" << std::endl ;
+            ht->printBuckets();
         } else {
-            ht  = new Hash(5,1,(db->getSize()/8),db->getDimensions(),db);
+            ht  = new Hash(4,1,(db->getSize()/16),db->getDimensions(),db);
+            ht->insert_Database();
+            std::cout << "done" << std::endl ;
+            ht->printBuckets();
         }
     }
 }
@@ -295,12 +303,13 @@ void Clustering::range_search_assign(void) {
 
         if (isCurve) {
             // We turn the representative to a vector and then do the range search
-            rep = dynamic_cast<Curve *>(r.second)->toVector(db->getDimensions());
+            rep = dynamic_cast<Curve *>(r.second)->toVector(dbvc->getDimensions());
         }else {
             rep = dynamic_cast<Vector *>(r.second);
         }
         auto ball = ht->range_search(rep,c_rs,r_rs);
         // For each item the range search returns we update the entry on the cassn vector
+        std::cout << "rep=" << r.first << "|range =" << ball.size() << std::endl;
         for (auto &bp : ball) {
             int index = db->getIndex(bp.second);
             if (std::get<0>(cassn[index]) == false) {
@@ -327,6 +336,7 @@ void Clustering::range_search_assign(void) {
         int cluster = std::get<1>(cassn[i]) ;
         assigned[cluster].push_back(i);
     }
+    r_rs *= 2.0;
 
 }
 void Clustering::pam_update(void) {
@@ -354,8 +364,8 @@ void Clustering::pam_update(void) {
 
 }
 // We convert the curves to vectors for the lsh
-Database * Clustering::toVectors(void) {
-    Database *dbv = new Database();
+void Clustering::toVectors(void) {
+    dbvc = new Database();
     int max_d = -1 ;
     for (int i = 0; i < db->getSize(); i++) {
         int d = db->getItem(i)->getDimension();
@@ -364,11 +374,10 @@ Database * Clustering::toVectors(void) {
         }
     }
     for (int i = 0; i < db->getSize(); i++) {
-        auto curve = dynamic_cast<Curve *>(db->getItem(i));
-        auto vector = curve->toVector(max_d);
-        dbv->addItem(vector);
+        Curve * curve = dynamic_cast<Curve *>(db->getItem(i));
+        Vector * vector = curve->toVector(max_d);
+        dbvc->addItem(vector);
     }
-    return dbv ;
 }
 void Clustering::mean_update(void){
     if (isCurve) {
@@ -527,7 +536,7 @@ double Clustering::Silhouette(){
         for (auto & x : assigned){ //mpainw sto assigned gia na vrw se poio cluster anoikei to item
         std::vector<int> &items = x.second ; //vazw stin items ton vector me ta index twn items tou cluster
             for (size_t i = 0; i < items.size(); i++) { //diasxizw twn vector me ta items
-                if (items[i] == j){ //an to item[i] to opoio einai to index enos ari8mou einai to idio me to j pou einai to item 
+                if (items[i] == j){ //an to item[i] to opoio einai to index enos ari8mou einai to idio me to j pou einai to item
                     cluster = x.first ; //pou exoume twra einai idia simainei oti to item auto vrisketai se auto to cluster
                 }
             }
