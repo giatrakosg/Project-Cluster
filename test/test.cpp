@@ -246,3 +246,24 @@ TEST_CASE("PRINT_RESULTS") {
     delete db ;
 
 }
+TEST_CASE("LSH-DBA") {
+    Database *db = new Database() ;
+    Parser parser(db);
+    std::string input_file ("../data/curves_clustering/input_projection6.csv");
+    parser.parseFile(input_file);
+    Clustering cluster (db,true,5,0,1,1) ;
+    std::vector<Curve *> curves;
+    long curve_size_sum = 0 ;
+    for (int i = 0; i < db->getSize(); i++) {
+        Curve *m = dynamic_cast<Curve *> (db->getItem(i)) ;
+        curves.push_back(m);
+        curve_size_sum += m->getSize();
+    }
+    //int mean_len = curve_size_sum / db->getSize();
+    //Curve *c = cluster.init_dba(curves);
+    //REQUIRE(c->getSize() == mean_len);
+    cluster.runClustering();
+    cluster.printRepresentatives();
+    delete db ;
+
+}

@@ -83,6 +83,7 @@ int main(int argc, char **argv) {
         cluster.runClustering();
         cluster.printRepresentatives();
         cluster.printResults(file);
+        file << "----------------------" << std::endl ;
     }
     //sleep(10);
     //for (size_t i = 0; i < threads.size(); i++) {

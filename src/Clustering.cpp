@@ -30,7 +30,7 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
         r_rs = 1.2 ;
         if (isCurve) {
             toVectors();
-            ht  = new Hash(4,1,(dbvc->getSize()/16),dbvc->getDimensions(),dbvc);
+            ht  = new Hash(6,1,(dbvc->getSize()/8),dbvc->getDimensions(),dbvc);
             ht->insert_Database();
             std::cout << "done" << std::endl ;
             ht->printBuckets();
@@ -196,6 +196,9 @@ std::pair<double,int> Clustering::closest_rep(int qi) {
     int min_index = -1 ;
     Item *t = db->getItem(qi);
     for (size_t i = 0; i < representative.size(); i++) {
+        if (representative[i] == NULL) {
+            continue ;
+        }
         double dist = t->distance(representative[i]);
         if (dist < min_distance) {
             min_distance = dist ;
@@ -300,7 +303,9 @@ void Clustering::range_search_assign(void) {
     // We cycle through each representative and call range_search
     for (auto &r : representative) {
         Vector *rep ;
-
+        if (r.second == NULL) {
+            continue ;
+        }
         if (isCurve) {
             // We turn the representative to a vector and then do the range search
             rep = dynamic_cast<Curve *>(r.second)->toVector(dbvc->getDimensions());
@@ -561,6 +566,28 @@ void Clustering::printResults(std::ostream &out) {
                 out << "centroid :" << centroid->getId() << "}" ;
             } else {
                 Vector *centroid = dynamic_cast<Vector *>(representative[i]);
+                out << *centroid ;
+            }
+            out << std::endl ;
+        }
+        out << "clustering_time :" << elapsed_secs << std::endl ;
+        out << "Silhouette :" << "TODO" << std::endl ;
+
+    } else {
+        out << "Algorithm: I" << flags[0] << "A" << flags[1] << "U" << flags[2] << std::endl ;
+        for (int i = 0; i < k; i++) {
+            int cluster_size = assigned[i].size();
+            out << "CLUSTER-" << i + 1<< "{size: " << cluster_size << "," ;
+            // Centroid
+            if (flags[2] == 0) {
+                Item *centroid = db->getItem(medoid_repr[i]) ;
+                out << "centroid :" << centroid->getId() << "}" ;
+            } else {
+                Curve *centroid = dynamic_cast<Curve *>(representative[i]);
+                if (centroid == NULL) {
+                    out << "centroid : none\n" ;
+                    continue ;
+                }
                 out << *centroid ;
             }
             out << std::endl ;
