@@ -18,6 +18,8 @@
 #include <math.h>
 #include <random>
 
+#include "Vector.hpp"
+
 using namespace std ;
 
 struct Point {
@@ -61,6 +63,8 @@ public:
     void clear(void); // Clear points from Curve
     void print(std::ostream &out);
     int getDimension(void);
+    // Turn curve to vector of length n . Fill with max point
+    Vector * toVector(int n);
     ~Curve();
 protected:
 

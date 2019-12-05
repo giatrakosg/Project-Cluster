@@ -168,7 +168,28 @@ void Curve::print(std::ostream &out) {
 int Curve::getDimension(void) {
     return this->getSize() ;
 }
+Vector * Curve::toVector(int n) {
+    Vector *v1 = new Vector(this->getId());
+    double max = -1 * INFINITY ;
+    for (size_t i = 0; i < points.size(); i++) {
+        double x = points[i]->x ;
+        double y = points[i]->y ;
+        if (x > max) {
+            max = x;
+        }
+        if (y > max) {
+            max = y;
+        }
+        v1->addPoint(x);
+        v1->addPoint(y);
+    }
+    for (int i = points.size(); i < n; i+=2) {
+        v1->addPoint(max);
+        v1->addPoint(max);
 
+    }
+    return v1 ;
+}
 Curve::~Curve() {
     for (size_t i = 0; i < points.size(); i++) {
         delete points[i] ;

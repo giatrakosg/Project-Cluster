@@ -25,7 +25,14 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
         std::cout << "done" << std::endl ;
 
     }
-    ht  = new Hash(5,1,(db->getSize()/8),db->getDimensions(),db);
+    if (flags[2] == 1) {
+        if (isCurve) {
+            dbvc = toVectors();
+            ht  = new Hash(5,1,(dbvc->getSize()/8),dbvc->getDimensions(),dbvc);
+        } else {
+            ht  = new Hash(5,1,(db->getSize()/8),db->getDimensions(),db);
+        }
+    }
 }
 
 void Clustering::random_init(void) {
@@ -284,7 +291,15 @@ void Clustering::range_search_assign(void) {
     }
     // We cycle through each representative and call range_search
     for (auto &r : representative) {
-        auto ball = ht->range_search(r.second,c_rs,r_rs);
+        Vector *rep ;
+
+        if (isCurve) {
+            // We turn the representative to a vector and then do the range search
+            rep = dynamic_cast<Curve *>(r.second)->toVector(db->getDimensions());
+        }else {
+            rep = dynamic_cast<Vector *>(r.second);
+        }
+        auto ball = ht->range_search(rep,c_rs,r_rs);
         // For each item the range search returns we update the entry on the cassn vector
         for (auto &bp : ball) {
             int index = db->getIndex(bp.second);
@@ -337,6 +352,23 @@ void Clustering::pam_update(void) {
         medoid_repr[x.first] = min_index ;
     }
 
+}
+// We convert the curves to vectors for the lsh
+Database * Clustering::toVectors(void) {
+    Database *dbv = new Database();
+    int max_d = -1 ;
+    for (int i = 0; i < db->getSize(); i++) {
+        int d = db->getItem(i)->getDimension();
+        if (d > max_d) {
+            max_d = d;
+        }
+    }
+    for (int i = 0; i < db->getSize(); i++) {
+        auto curve = dynamic_cast<Curve *>(db->getItem(i));
+        auto vector = curve->toVector(max_d);
+        dbv->addItem(vector);
+    }
+    return dbv ;
 }
 void Clustering::mean_update(void){
     if (isCurve) {
