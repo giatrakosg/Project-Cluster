@@ -30,7 +30,7 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
         r_rs = 1.2 ;
         if (isCurve) {
             toVectors();
-            ht  = new Hash(6,1,(dbvc->getSize()/8),dbvc->getDimensions(),dbvc);
+            ht  = new Hash(10,1,(dbvc->getSize()/64),dbvc->getDimensions(),dbvc);
             ht->insert_Database();
             std::cout << "done" << std::endl ;
             ht->printBuckets();

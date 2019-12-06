@@ -19,16 +19,7 @@ struct cluster_t_args {
     Database *db ;
     //std::ostream & out ;
 };
-/*
-void cluster_thread_f(cluster_t_args args) {
-    sleep(5);
-    //cluster_t_args * args = ( *) _args ;
-    std::cout << args.isCurve << " " << args.k << " " << args.flags[0] << args.flags[1] << args.flags[2] << std::endl ;
-    Clustering cluster (args.db,args.isCurve,args.k,args.flags[0],args.flags[1],args.flags[2]);
-    cluster.runClustering();
-    cluster.printRepresentatives();
-}
-*/
+
 int main(int argc, char **argv) {
     CMDParser cmd_p ;
     std::string input ;
@@ -74,22 +65,12 @@ int main(int argc, char **argv) {
         args.input = input ;
         args.out = "out";
         args.db = db ;
-        //args->out = std::cout ;
-        //std::thread *t = new
-
-        //std::thread(cluster_thread_f,args);
-        //threads.push_back(t);
-        //t->join();
         Clustering cluster (db,args.isCurve,args.k,args.flags[0],args.flags[1],args.flags[2]);
         cluster.runClustering();
         cluster.printRepresentatives();
         cluster.printResults(file);
         file << "----------------------" << std::endl ;
     }
-    //sleep(10);
-    //for (size_t i = 0; i < threads.size(); i++) {
-    //    threads[i]->join();
-    //}
     file.close();
     delete db ;
     return 0;
