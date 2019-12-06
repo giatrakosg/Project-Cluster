@@ -63,11 +63,12 @@ int main(int argc, char **argv) {
         args.flags[0] = (i & mask1) >> 0;
         args.flags[1] = (i & mask2) >> 1;
         args.flags[2] = (i & mask3) >> 2;
-        if (args.flags[0] == 1) {
+
+        args.isCurve = isCurve ;
+        if ((args.flags[1] == 1) && (isCurve)) {
             continue ;
         }
 
-        args.isCurve = isCurve ;
         args.k = nclusters ;
 
         args.input = input ;

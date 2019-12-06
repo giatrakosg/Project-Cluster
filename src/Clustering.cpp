@@ -80,6 +80,7 @@ Curve * Clustering::init_dba(std::vector<Curve *> &Sn) {
     for (size_t i = 0; i < Sn.size(); i++) {
         mean_length += Sn[i]->getSize() / (double) num_curves ;
     }
+    mean_length = floor(mean_length);
     // We count the number of curves with length greater that the mean
     int num_gt_mean = std::count_if(Sn.begin(),Sn.end(),
     [mean_length](Curve *c) {
@@ -179,7 +180,7 @@ double Clustering::D(Item *t){
     }
     return min_distance;
 }
-std::pair<double,int> Clustering::closest_rep(Item *t) {
+    std::pair<double,int> Clustering::closest_rep(Item *t) {
     double min_distance = INFINITY ;
     int min_index = -1 ;
     for (size_t i = 0; i < representative.size(); i++) {
@@ -209,7 +210,6 @@ std::pair<double,int> Clustering::closest_rep(int qi) {
 }
 
 int Clustering::find_new_centroid(set<int> &used){
-    int Clustering::find_new_centroid(set<int> &used){
     vector< std::pair<int,double> > partial_sum_array; //pinakas tetragwnwn merikwn a8roismatwn
     partial_sum_array.push_back(std::pair<int,double> (-1,0.0)) ; //vazw ws prwto item sto pinaka to -1,0 giati o ari8mos -1
     double min_distance; //den anikei sto set mas kai i apostasi 0.0 gia na arxikopoiisoume to a8roisma twn merikwn apostasewn
@@ -260,13 +260,13 @@ void Clustering::kmeans_init(void) {
     int selected = 0;
     std::set<int> used ;
     used.insert(index) ;
-    Item *m = db->getItem(index);
+    Item *m = db->getItem(index)->clone();
     representative.insert(std::pair<int,Item *> (selected,m));
     selected++ ;
     while (selected < k){
         index = find_new_centroid(used) ;
         used.insert(index) ;
-        m = db->getItem(index) ;
+        m = db->getItem(index)->clone() ;
         representative.insert(std::pair<int,Item *> (selected,m)) ;
         selected++ ;
     }
