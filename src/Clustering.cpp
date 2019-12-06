@@ -209,6 +209,7 @@ std::pair<double,int> Clustering::closest_rep(int qi) {
 }
 
 int Clustering::find_new_centroid(set<int> &used){
+    int Clustering::find_new_centroid(set<int> &used){
     vector< std::pair<int,double> > partial_sum_array; //pinakas tetragwnwn merikwn a8roismatwn
     partial_sum_array.push_back(std::pair<int,double> (-1,0.0)) ; //vazw ws prwto item sto pinaka to -1,0 giati o ari8mos -1
     double min_distance; //den anikei sto set mas kai i apostasi 0.0 gia na arxikopoiisoume to a8roisma twn merikwn apostasewn
@@ -217,7 +218,7 @@ int Clustering::find_new_centroid(set<int> &used){
         if (!(used.find(i) == used.end())){ //an to Item einai sta used diladi einai centroid tote de vriskei tin minimum apostasi tou
             continue;
         }
-        min_distance = pow(D(db->getItem(i)),2) ; //vriskw tin minimum distance enos simeiou apo to centroid tou kai tin apo8ikeuw
+        min_distance = D(db->getItem(i)) / 1.2 ; //vriskw tin minimum distance enos simeiou apo to centroid tou kai tin apo8ikeuw
         std::pair<int,double> p = partial_sum_array[partial_sum_array.size() - 1] ; //ftiaxnw ena kainourio pair p wste na krataw ti
         //meriki apostasi tou proigoumenou Item tou pinaka pou mou xreiazetai gia to Item pou exw
         partial_sum_array.push_back(std::pair<int,double> (i,p.second + min_distance)) ; //pros8etw ti metriki apostasi tou proigoumenou
@@ -226,33 +227,34 @@ int Clustering::find_new_centroid(set<int> &used){
     std::uniform_int_distribution<int> distribution(0,partial_sum_array[partial_sum_array.size() - 1].second) ;
     double x = distribution(this-> generator) ; //pairnw ena random ari8mo anamesa sto 0 kai ti megisti metriki apostasi
     //pou einai i metriki apostasi tou item tou teleutaiou antikeimenou tou pinaka partial_sum_arrat
-    int new_centroid_position = Binary_search(partial_sum_array,x,partial_sum_array[1].second,partial_sum_array[partial_sum_array.size() - 1].second);
+    int new_centroid_position = Binary_search(partial_sum_array,x,partial_sum_array[1].first,partial_sum_array[partial_sum_array.size() - 1].first);
     //kanw binary search gia na vrw ti 8esi tou kainouriou item
     return new_centroid_position ;
 }
 
+
 //epistrefei ti 8esi tou neou centroid sto db
 int Clustering::Binary_search(vector< std::pair<int,double> > &partial_sum_array,double x,int l,int r){ //to l einai to prwto kai to r einai to teleutaio stoixeio
     if (r >= 1){
-        int mid = 1 + (r - 1) / 2;
-        float var1 = abs(x - partial_sum_array[mid].second ) ; //to var1 einai i diafora meta3u tou ari8mou pou diale3ame tuxaia kai tou mid
+        int mid = (l + (r - 1)) / 2;
+        double var1 = abs(x - partial_sum_array[mid].second ) ; //to var1 einai i diafora meta3u tou ari8mou pou diale3ame tuxaia kai tou mid
         //einai to middle tou ka8e upopinaka
-        float var2 = abs(partial_sum_array[mid].second - partial_sum_array[mid - 1].second ) ;
+        double var2 = abs(partial_sum_array[mid].second - partial_sum_array[mid - 1].second ) ;
         //to var2 einai i diafora meta3u tou ari8mou pou diale3ame tuxaia kai tou mid-1 pou einai o proigoumenos ari8mos apo to middle
-        float var3 = abs(partial_sum_array[mid].second - partial_sum_array[mid + 1].second ) ;
+        double var3 = abs(partial_sum_array[mid].second - partial_sum_array[mid + 1].second ) ;
         //antistoixa gia ta mid+1
         if (var1 <= var2 && var1<=var3 )
             return partial_sum_array[mid].first;
         if (x < partial_sum_array[mid].second )
-            return Binary_search(partial_sum_array,x,l,mid - 1);
-        return Binary_search(partial_sum_array,x,mid + 1,r);
+            return Binary_search(partial_sum_array,x, l , mid - 1);
+        return Binary_search(partial_sum_array,x, mid + 1, r );
     }
     return -1;
 }
 
 
 void Clustering::kmeans_init(void) {
-    std::uniform_int_distribution<int> distribution(0,db->getSize() - 1) ; // Uniform distribution used for
+   std::uniform_int_distribution<int> distribution(0,db->getSize() - 1) ; // Uniform distribution used for
 
     int index = distribution(this -> generator); //to index einai i 8esi pou exei to item sti vasi
     int selected = 0;
