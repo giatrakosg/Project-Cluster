@@ -14,7 +14,6 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
     flags[2] = update_f ;
     std::cout << "Started clustering with \n" <<
     "k=" << k << std::endl ;
-    if (flags[2] == 0) {
         std::cout << "Calculating pairwise distances...." ;
         for (int i = 0; i < db->getSize(); i++) {
             for (int j = 0; j < db->getSize(); j++) {
@@ -24,7 +23,6 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
         }
         std::cout << "done" << std::endl ;
 
-    }
     if (flags[1] == 1) {
         std::cout << "initializing hashtable..." ;
         r_rs = 1.2 ;
@@ -491,9 +489,10 @@ Clustering::~Clustering() {
 int Clustering::nearest_cluster(int cluster){
 //epistrefei to kontinotero cluster apo ena simeio
     Item * centroid1 = representative[cluster];
-    Item * centroid2 ;
+    //Item * centroid2 ;
     int n_cluster ;
-    double min_dist,dist ;
+    double min_dist = INFINITY;
+    /*
     if (cluster > 0){
         centroid2 = representative[0];
         n_cluster = 0 ;
@@ -503,11 +502,12 @@ int Clustering::nearest_cluster(int cluster){
         n_cluster = 1 ;
     }
     min_dist = centroid1->distance(centroid2);
+*/
     for (auto & x : representative){
         if (x.first == cluster){
             continue;
         }
-        dist = centroid1->distance(x.second);
+        double dist = centroid1->distance(x.second);
         if (dist < min_dist){
             min_dist = dist;
             n_cluster = x.first ;
@@ -524,16 +524,17 @@ double Clustering::Silhouette_point(int cluster,int point,int nearest_cluster){
     double bi = 0;
     for (int i = 0; i < (int)cluster_points.size(); ++i)
     {
-        if (i == point)
+        if (cluster_points[i] == point)
             continue;
-        ai += dist[pair<int,int>(point,i)];
+        ai += dist[pair<int,int>(point,cluster_points[i])];
     }
     for (unsigned i = 0; i < nearest_cluster_points.size(); ++i)
     {
-        bi += dist[pair<int,int>(point,i)];
+        bi += dist[pair<int,int>(point,nearest_cluster_points[i])];
     }
     ai = ai / cluster_points.size();
     bi = bi / nearest_cluster_points.size();
+    //std::cout << ai << " "<< bi << std::endl;
     double max = ai > bi ? ai : bi;
     return (bi - ai)/max;
 }
@@ -556,13 +557,22 @@ double Clustering::Silhouette(){
     total_si = total_si / (db->getSize()) ;
     return total_si ;
 }
-void Clustering::printResults(std::ostream &out) {
+
+void Clustering::printResults(std::ostream &out,bool complete) {
+    double stotal = Silhouette();
     if (!isCurve) {
         out << "Algorithm: I" << flags[0] << "A" << flags[1] << "U" << flags[2] << std::endl ;
         for (int i = 0; i < k; i++) {
             int cluster_size = assigned[i].size();
             out << "CLUSTER-" << i + 1<< "{size: " << cluster_size << "," ;
             // Centroid
+            if (complete) {
+                out << "{" ;
+                for (size_t j = 0; j < assigned[i].size(); j++) {
+                    out << db->getItem(assigned[i][j])->getId() << "," ;
+                }
+                out <<"}\n";
+            }
             if (flags[2] == 0) {
                 Item *centroid = db->getItem(medoid_repr[i]) ;
                 out << "centroid :" << centroid->getId() << "}" ;
@@ -573,7 +583,11 @@ void Clustering::printResults(std::ostream &out) {
             out << std::endl ;
         }
         out << "clustering_time :" << elapsed_secs << std::endl ;
-        out << "Silhouette :" << "TODO" << std::endl ;
+        out << "Silhouette :" ;
+        for (size_t i = 0; i < k; i++) {
+            /* code */
+        }
+        out << stotal << std::endl ;
 
     } else {
         out << "Algorithm: I" << flags[0] << "A" << flags[1] << "U" << flags[2] << std::endl ;
@@ -581,6 +595,14 @@ void Clustering::printResults(std::ostream &out) {
             int cluster_size = assigned[i].size();
             out << "CLUSTER-" << i + 1<< "{size: " << cluster_size << "," ;
             // Centroid
+            if (complete) {
+                out << "{" ;
+                for (size_t j = 0; j < assigned[i].size(); j++) {
+                    out << db->getItem(assigned[i][j])->getId() << "," ;
+                }
+                out <<"}\n";
+            }
+
             if (flags[2] == 0) {
                 Item *centroid = db->getItem(medoid_repr[i]) ;
                 out << "centroid :" << centroid->getId() << "}" ;
@@ -595,7 +617,12 @@ void Clustering::printResults(std::ostream &out) {
             out << std::endl ;
         }
         out << "clustering_time :" << elapsed_secs << std::endl ;
-        out << "Silhouette :" << "TODO" << std::endl ;
+        out << "Silhouette :" ;
+        for (size_t i = 0; i < k; i++) {
+            /* code */
+        }
+        out << stotal << std::endl ;
+
 
     }
 }

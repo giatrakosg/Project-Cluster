@@ -95,7 +95,7 @@ public:
     double Silhouette();//Silhouette evaluation
     void runClustering(); // Function called by main
     void printRepresentatives(void) ;
-    void printResults(std::ostream &); // print results to ostream
+    void printResults(std::ostream &,bool ); // print results to ostream
     ~Clustering();
 protected:
 

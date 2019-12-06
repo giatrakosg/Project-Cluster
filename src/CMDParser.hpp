@@ -19,7 +19,7 @@ class CMDParser {
 private:
 public:
     CMDParser();
-    void getArgs(int ,char **,std::string &,std::string &,std::string &); // Receives the argc , argv and string for the input , configuration and output file and  parses the command line arguments
+    void getArgs(int ,char **,std::string &,std::string &,std::string &,bool &); // Receives the argc , argv and string for the input , configuration and output file and  parses the command line arguments
     ~CMDParser();
 protected:
 

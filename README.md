@@ -34,6 +34,27 @@ flags init_f , assign_f, update_f . Αν το init_f ειναι 0 τοτε επ�
 Clustering(..,0,0,0) επιλεγονται οι [random select ,lloyd assign,pam a'la lloyd update]
 Clustering(..,1,0,0) επιλεγονται οι [kmeans++ ,lloyd assign,pam a'la lloyd update]
 
+#Αποτελεσματα
+
+Οι συγκρισεις βασιζονται στην εισοδο DataVectors_5_500x100
+
+## Kmeans init vs Random Init
+
+Στα αποτελεσματα μας φαινεται η αισθητη βελτιωση που προσφερει η kmeans init σε
+σχεση με την random init στα αποτελεσματα . Απο σ = 0.5 , παμε στο 0.9 με την kmeans
+init . Ενω και ο χρονος υπολογισμου μειωνεται .
+
+## Reverse Assignment vs Lloyd
+
+Το reverse assignment δεν προσφερει καποια βελτιωση στα αποτελεσματα . Ενω πρoσθετει
+χρονο , που οφειλετε στην αρχικοποιηση των hashtable
+
+## PAM update vs Mean Vector
+
+Η mean vector βελτιωνει τα αποτελεσματα σε θεμα ακριβειας αλλα προσθετει χρονο
+στον υπολογισμο . Κατι που θα περιμεναμε να δουμε λογω του χρονου που παιρνει ο
+υπολογισμος μεσου διανυσματος / καμπυλης .
+
 #Compile
 
 Στον φακελο src/
@@ -69,4 +90,5 @@ Clustering(..,1,0,0) επιλεγονται οι [kmeans++ ,lloyd assign,pam a'l
 #Συμμετεχοντες
 
 sdi1600036 - Γιατρακος Γεωργιος
+
 sdi1400134 - Παμποριδης Στεφανος

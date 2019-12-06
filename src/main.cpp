@@ -25,7 +25,8 @@ int main(int argc, char **argv) {
     std::string input ;
     std::string config ;
     std::string output ;
-    cmd_p.getArgs(argc,argv,input,config,output);
+    bool complete ;
+    cmd_p.getArgs(argc,argv,input,config,output,complete);
     std::cout << input << " " << config << " " << output << "\n" ;
 
     ConfParser conf_p (config) ;
@@ -68,7 +69,7 @@ int main(int argc, char **argv) {
         Clustering cluster (db,args.isCurve,args.k,args.flags[0],args.flags[1],args.flags[2]);
         cluster.runClustering();
         cluster.printRepresentatives();
-        cluster.printResults(file);
+        cluster.printResults(file,complete);
         file << "----------------------" << std::endl ;
     }
     file.close();
