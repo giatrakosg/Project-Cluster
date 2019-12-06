@@ -88,6 +88,8 @@ private:
     void toVectors(void); // Turn the db consisting of curves to vectors to run lsh
     Database *dbvc ; // Database of vectors from curves
     double elapsed_secs ;
+    double Silhouette_cluster(int c);
+
 public:
     Clustering(Database *,bool ,int ,int ,int ,int ); // Database with data points
     // Followed by k and sequence of [0,1,0] etc that selects the init , assign and update

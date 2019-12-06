@@ -538,6 +538,18 @@ double Clustering::Silhouette_point(int cluster,int point,int nearest_cluster){
     double max = ai > bi ? ai : bi;
     return (bi - ai)/max;
 }
+double Clustering::Silhouette_cluster(int c){
+    double total_si = 0 ;
+    int n_cluster ; //o ari8mos tou cluster pou vrisketai to item, to kontinotero cluster sto item, kai to item to idio
+    //for (int j = 0; j < db->getSize(); j++){ //pairnw ta index olwn twn item tis vasis
+        for (auto & x : assigned[c]){ //mpainw sto assigned gia na vrw se poio cluster anoikei to item
+          n_cluster = nearest_cluster(c);
+          total_si += Silhouette_point(c,x,n_cluster);
+        }
+    //}
+    total_si /= db->getSize() ;
+    return total_si ;
+}
 
 double Clustering::Silhouette(){
     double total_si = 0; //8a krataw edw tin a3iologisi tou si pou einai o ari8mos pou 8a epistrefei i silhouette
@@ -560,6 +572,7 @@ double Clustering::Silhouette(){
 
 void Clustering::printResults(std::ostream &out,bool complete) {
     double stotal = Silhouette();
+    double scluster ;
     if (!isCurve) {
         out << "Algorithm: I" << flags[0] << "A" << flags[1] << "U" << flags[2] << std::endl ;
         for (int i = 0; i < k; i++) {
@@ -583,12 +596,12 @@ void Clustering::printResults(std::ostream &out,bool complete) {
             out << std::endl ;
         }
         out << "clustering_time :" << elapsed_secs << std::endl ;
-        out << "Silhouette :" ;
+        out << "Silhouette : [" ;
         for (size_t i = 0; i < k; i++) {
-            /* code */
+            scluster = Silhouette_cluster(i);
+            out << scluster << "," ;
         }
-        out << stotal << std::endl ;
-
+        out << stotal << "]"<< std::endl ;
     } else {
         out << "Algorithm: I" << flags[0] << "A" << flags[1] << "U" << flags[2] << std::endl ;
         for (int i = 0; i < k; i++) {
@@ -617,11 +630,12 @@ void Clustering::printResults(std::ostream &out,bool complete) {
             out << std::endl ;
         }
         out << "clustering_time :" << elapsed_secs << std::endl ;
-        out << "Silhouette :" ;
+        out << "Silhouette : [" ;
         for (size_t i = 0; i < k; i++) {
-            /* code */
+            scluster = Silhouette_cluster(i);
+            out << scluster << "," ;
         }
-        out << stotal << std::endl ;
+        out << stotal << "]"<< std::endl ;
 
 
     }
