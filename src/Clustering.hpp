@@ -19,6 +19,7 @@
 #include <functional>
 #include <ctime>
 #include <iostream>
+#include <thread>
 
 #include "Database.hpp"
 #include "Item.hpp"
@@ -53,6 +54,7 @@ private:
     Curve * dba(std::vector<Curve *> );
     Point * meanPoint(std::vector<Point *> );
     Vector * meanVector(std::vector<Vector *>);
+    void update_thread(int ,std::vector<int> &points) ;
     void pam_update(); // Update using PAM (lloyds)
     void mean_update(); // Update using mean vectors / curve
 

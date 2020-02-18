@@ -346,33 +346,39 @@ void Clustering::range_search_assign(void) {
     r_rs *= 2.0;
 
 }
+void Clustering::update_thread(int cnum,std::vector<int> &points) {
+    double min_total_dist = INFINITY ;
+    int min_index = -1 ;
+    for (size_t i = 0; i < points.size(); i++) {
+        double total_dist = 0 ;
+        int index1 = points[i];
+        for (size_t j = 0; j < points.size(); j++) {
+            int index2 = points[j] ;
+            total_dist = db->getItem(index1)->distance(db->getItem(index2));
+            //total_dist += dist[pair<int,int>(index1,index2)] ; // We have already calculated the pairwise distances
+        }
+        if (total_dist < min_total_dist) {
+            min_total_dist = total_dist ;
+            min_index = index1 ;
+        }
+    }
+    // Empty cluster
+    if (points.size() == 0) {
+        representative[cnum] = NULL;
+        return ;
+    }
+    representative[cnum] = db->getItem(min_index);
+    medoid_repr[cnum] = min_index ;
+}
 void Clustering::pam_update(void) {
     // We iterate through each cluster and update the medoid
-    for (auto & x : assigned)
-    {
-        std::vector<int> &items = x.second ;
-        double min_total_dist = INFINITY ;
-        int min_index = -1 ;
-        for (size_t i = 0; i < items.size(); i++) {
-            double total_dist = 0 ;
-            int index1 = items[i];
-            for (size_t j = 0; j < items.size(); j++) {
-                int index2 = items[j] ;
-                total_dist = db->getItem(index1)->distance(db->getItem(index2));
-                //total_dist += dist[pair<int,int>(index1,index2)] ; // We have already calculated the pairwise distances
-            }
-            if (total_dist < min_total_dist) {
-                min_total_dist = total_dist ;
-                min_index = index1 ;
-            }
-        }
-        // Empty cluster
-        if (items.size() == 0) {
-            representative[x.first] = NULL;
-            continue ;
-        }
-        representative[x.first] = db->getItem(min_index);
-        medoid_repr[x.first] = min_index ;
+    std::vector<std::thread> threads;
+    for (int i = 0; i < k; i++) {
+        threads.push_back(std::thread([=] {update_thread(i,assigned[i]);}));
+    }
+
+    for (auto &t : threads) {
+        t.join();
     }
 
 }
@@ -398,14 +404,20 @@ void Clustering::mean_update(void){
             representative[cluster.first] = nm ;
         }
     } else {
+        std::vector<std::thread> threads;
         for (auto &cluster : assigned) {
             std::vector<Vector *> vectors;
             for (size_t i = 0; i < cluster.second.size(); i++) {
                 vectors.push_back(dynamic_cast<Vector *> (db->getItem(cluster.second.at(i)))) ;
             }
-            auto nm = meanVector(vectors);
-            delete representative[cluster.first] ;
-            representative[cluster.first] = nm ;
+            threads.push_back(std::thread([=] {
+                auto nm = meanVector(vectors);
+                delete representative[cluster.first] ;
+                representative[cluster.first] = nm ;
+            }));
+        }
+        for (auto &t : threads) {
+            t.join();
         }
 
     }

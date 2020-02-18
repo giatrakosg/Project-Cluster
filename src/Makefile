@@ -4,10 +4,10 @@ SOURCE = CMDParser.cpp main.cpp Parser.cpp Database.cpp Item.cpp Vector.cpp test
 HEADER = CMDParser.hpp main.hpp Parser.hpp Database.hpp Item.hpp Vector.hpp Curve.hpp ConfParser.hpp Clustering.hpp Hashtable.h
 OUT = cluster test
 CC = g++
-FLAGS = -g -c -std=c++11 -Wall
+FLAGS = -g -c -std=c++11 -Wall -lpthread -pg
 
 cluster : $(OBJS)
-		$(CC) -g $(OBJS) -lpthread -o cluster
+		$(CC) -g -pg  $(OBJS) -lpthread -o cluster
 test : $(TESTOBJS)
 		$(CC) -g $(TESTOBJS) -o ../test/test
 test.o : ../test/test.cpp
