@@ -15,12 +15,14 @@ Clustering::Clustering(Database *db,bool isCurve , int num_of_clusters ,int init
     std::cout << "Started clustering with \n" <<
     "k=" << k << std::endl ;
         std::cout << "Calculating pairwise distances...." ;
+        /*
         for (int i = 0; i < db->getSize(); i++) {
             for (int j = 0; j < db->getSize(); j++) {
                 double d = db->getItem(i)->distance(db->getItem(j));
                 dist[std::pair<int,int> (i,j)] = d ;
             }
         }
+        */
         std::cout << "done" << std::endl ;
 
     if (flags[1] == 1) {
@@ -356,7 +358,8 @@ void Clustering::pam_update(void) {
             int index1 = items[i];
             for (size_t j = 0; j < items.size(); j++) {
                 int index2 = items[j] ;
-                total_dist += dist[pair<int,int>(index1,index2)] ; // We have already calculated the pairwise distances
+                total_dist = db->getItem(index1)->distance(db->getItem(index2));
+                //total_dist += dist[pair<int,int>(index1,index2)] ; // We have already calculated the pairwise distances
             }
             if (total_dist < min_total_dist) {
                 min_total_dist = total_dist ;
@@ -517,7 +520,7 @@ int Clustering::nearest_cluster(int cluster){
 }
 
 double Clustering::Silhouette_point(int cluster,int point,int nearest_cluster){
-    std::vector<int> cluster_points = assigned[cluster];
+    std::vector<int> &cluster_points = assigned[cluster];
     std::vector<int> nearest_cluster_points = assigned[nearest_cluster];
 
     double ai = 0;
@@ -526,11 +529,14 @@ double Clustering::Silhouette_point(int cluster,int point,int nearest_cluster){
     {
         if (cluster_points[i] == point)
             continue;
-        ai += dist[pair<int,int>(point,cluster_points[i])];
+
+        ai += db->getItem(point)->distance(db->getItem(cluster_points[i]));
+        //ai += dist[pair<int,int>(point,cluster_points[i])];
     }
     for (unsigned i = 0; i < nearest_cluster_points.size(); ++i)
     {
-        bi += dist[pair<int,int>(point,nearest_cluster_points[i])];
+        ai += db->getItem(point)->distance(db->getItem(nearest_cluster_points[i]));
+        //bi += dist[pair<int,int>(point,nearest_cluster_points[i])];
     }
     ai = ai / cluster_points.size();
     bi = bi / nearest_cluster_points.size();
@@ -597,7 +603,7 @@ void Clustering::printResults(std::ostream &out,bool complete) {
         }
         out << "clustering_time :" << elapsed_secs << std::endl ;
         out << "Silhouette : [" ;
-        for (size_t i = 0; i < k; i++) {
+        for (int i = 0; i < k; i++) {
             scluster = Silhouette_cluster(i);
             out << scluster << "," ;
         }
@@ -631,7 +637,7 @@ void Clustering::printResults(std::ostream &out,bool complete) {
         }
         out << "clustering_time :" << elapsed_secs << std::endl ;
         out << "Silhouette : [" ;
-        for (size_t i = 0; i < k; i++) {
+        for (int i = 0; i < k; i++) {
             scluster = Silhouette_cluster(i);
             out << scluster << "," ;
         }
