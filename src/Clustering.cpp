@@ -316,7 +316,7 @@ void Clustering::range_search_assign(void) {
         }
         auto ball = ht->range_search(rep,c_rs,r_rs);
         // For each item the range search returns we update the entry on the cassn vector
-        std::cout << "rep=" << r.first << "|range =" << ball.size() << std::endl;
+        //std::cout << "rep=" << r.first << "|range =" << ball.size() << std::endl;
         for (auto &bp : ball) {
             int index = db->getIndex(bp.second);
             if (std::get<0>(cassn[index]) == false) {
