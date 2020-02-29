@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <vector>
 #include <thread>
+#include <mutex>
 #include "Database.hpp"
 #include "Parser.hpp"
 #include "Clustering.hpp"
@@ -19,7 +20,15 @@ struct cluster_t_args {
     Database *db ;
     //std::ostream & out ;
 };
+void clustering_thread(cluster_t_args args,std::mutex &mutex,Database *db,bool complete,std::ofstream &file) {
+    Clustering cluster (db,args.isCurve,args.k,args.flags[0],args.flags[1],args.flags[2]);
+    cluster.runClustering();
+    mutex.lock();
+    cluster.printRepresentatives();
+    cluster.printResults(file,complete);
+    mutex.unlock();
 
+}
 int main(int argc, char **argv) {
     CMDParser cmd_p ;
     std::string input ;
@@ -43,10 +52,9 @@ int main(int argc, char **argv) {
     std::ofstream file ;
     file.open(output);
 
-    //std::vector<std::thread *> threads;
+    std::vector<std::thread> threads;
     //std::thread * cluster_ts = new std::thread[8] ;
     for (unsigned int i = 0; i < 8; i++) {
-        int err ;
         int mask1 = 1 << 0 ;
         int mask2 = 1 << 1 ;
         int mask3 = 1 << 2 ;
@@ -66,11 +74,11 @@ int main(int argc, char **argv) {
         args.input = input ;
         args.out = "out";
         args.db = db ;
-        Clustering cluster (db,args.isCurve,args.k,args.flags[0],args.flags[1],args.flags[2]);
-        cluster.runClustering();
-        cluster.printRepresentatives();
-        cluster.printResults(file,complete);
-        file << "----------------------" << std::endl ;
+        std::mutex mtx ;
+        threads.push_back(std::thread(clustering_thread,args,std::ref(mtx),db,complete,std::ref(file)));
+    }
+    for (auto &t : threads) {
+        t.join();
     }
     file.close();
     delete db ;
